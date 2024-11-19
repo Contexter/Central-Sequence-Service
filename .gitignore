@@ -1,6 +1,30 @@
+# Existing entries
 .DS_Store
 .build
 .swiftpm
 Packages
 *.xcodeproj
 *.xcworkspace
+
+# Python virtual environments
+venv/
+.env/
+
+# Python bytecode files
+*.pyc
+*.pyo
+__pycache__/
+
+# pip and virtual environment tools
+pip-log.txt
+pip-delete-this-directory.txt
+Pipfile.lock
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# IDEs and editors
+.vscode/
+.idea/
+*.swp
+*.swo

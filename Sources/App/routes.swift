@@ -1,13 +1,11 @@
-import Fluent
 import Vapor
 
 func routes(_ app: Application) throws {
-    app.get { req async throws in
-        try await req.view.render("index", ["title": "Hello Vapor!"])
+    // Serve the OpenAPI spec
+        return req.fileio.streamFile(at: filePath)
     }
 
-    app.get("hello") { req async -> String in
-        "Hello, world!"
+    // Serve the ReDoc documentation page
+        return try await req.view.render("redoc")
     }
-
 }
