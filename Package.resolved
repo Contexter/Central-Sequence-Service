@@ -1,5 +1,5 @@
 {
-  "originHash" : "eaff489b35c155f00bc1c9af7540a089f8268f9a4139e2956862b020d3e73939",
+  "originHash" : "0d7a2057c5b4f88c3fd4b50754c3e8ea2adc164ff066fedb129c18c054245a8e",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -53,6 +53,15 @@
       "state" : {
         "revision" : "6e3a5ff7f2cb733771a6bd71dd3a491cce79f24d",
         "version" : "4.8.0"
+      }
+    },
+    {
+      "identity" : "fountainai-swift-openapi-parser",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Contexter/FountainAI-Swift-OpenAPI-Parser.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "26e6b22359bf82016d89736faa11e80451fef897"
       }
     },
     {
@@ -269,6 +278,15 @@
       "state" : {
         "revision" : "4232d34efa49f633ba61afde365d3896fc7f8740",
         "version" : "2.15.0"
+      }
+    },
+    {
+      "identity" : "yams",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/jpsim/Yams.git",
+      "state" : {
+        "revision" : "9ff1cc9327586db4e0c8f46f064b6a82ec1566fa",
+        "version" : "4.0.6"
       }
     }
   ],

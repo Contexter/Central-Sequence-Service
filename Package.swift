@@ -30,7 +30,7 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
-                .product(name: "OpenAPIParser", package: "FountainAI-Swift-OpenAPI-Parser"),
+                .product(name: "OpenAPIParserLib", package: "FountainAI-Swift-OpenAPI-Parser"), // Updated module name
             ],
             swiftSettings: swiftSettings
         ),
