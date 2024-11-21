@@ -1,5 +1,5 @@
 {
-  "originHash" : "0d7a2057c5b4f88c3fd4b50754c3e8ea2adc164ff066fedb129c18c054245a8e",
+  "originHash" : "5da2c143f710fd3b4eaa3e3fc66f5ceee745ad91f04bf6056023f96aba37cf74",
   "pins" : [
     {
       "identity" : "async-http-client",
@@ -56,15 +56,6 @@
       }
     },
     {
-      "identity" : "fountainai-swift-openapi-parser",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Contexter/FountainAI-Swift-OpenAPI-Parser.git",
-      "state" : {
-        "branch" : "main",
-        "revision" : "26e6b22359bf82016d89736faa11e80451fef897"
-      }
-    },
-    {
       "identity" : "leaf",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/vapor/leaf.git",
@@ -89,6 +80,15 @@
       "state" : {
         "revision" : "a31236f24bfd2ea2f520a74575881f6731d7ae68",
         "version" : "4.7.0"
+      }
+    },
+    {
+      "identity" : "openapiserve",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Contexter/OpenAPIServe.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "fc2cde6c328ca4fa4c6e900e5c8bd87678356fb3"
       }
     },
     {
@@ -278,15 +278,6 @@
       "state" : {
         "revision" : "4232d34efa49f633ba61afde365d3896fc7f8740",
         "version" : "2.15.0"
-      }
-    },
-    {
-      "identity" : "yams",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/jpsim/Yams.git",
-      "state" : {
-        "revision" : "9ff1cc9327586db4e0c8f46f064b6a82ec1566fa",
-        "version" : "4.0.6"
       }
     }
   ],
