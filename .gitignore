@@ -1,0 +1,73 @@
+# Build and Derived Data
+.build/
+Packages/
+DerivedData/
+.swiftpm/
+xcuserdata/
+*.xcworkspace/
+
+# Logs and Reports
+*.log
+*.pid
+*.seed
+*.xcactivitylog
+*.idehistory
+
+# macOS Files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Vapor Secrets
+Run/secrets/
+
+# Environment Files
+.env
+.env.*
+
+# Temporary Files and Backup Files
+*.tmp
+*.swp
+*.swo
+*.bak
+*~
+*.un~
+Thumbs.db
+
+# Swift Package Manager
+/.swiftpm/xcode
+/.swiftpm/build
+
+# Xcode
+*.xccheckout
+*.xcodeproj/
+*.xcworkspace/
+
+# Vim Swap Files
+*.swp
+*.swo
+
+# Editor-Specific Files
+.idea/
+.vscode/
+*.orig
+
+# Testing and Debugging
+test-reports/
+test-output/
+
+# Docker
+.dockerignore
+Dockerfile
+docker-compose.yml
+
+# Coverage
+*.profdata
+*.gcda
+*.gcno
+.coverage
+.coverage.*
+
+# Local Config Files
+*.local
+*.lock

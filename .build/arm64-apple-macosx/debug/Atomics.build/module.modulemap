@@ -1,4 +1,0 @@
-module Atomics {
-    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Atomics.build/Atomics-Swift.h"
-    requires objc
-}

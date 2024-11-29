@@ -1,4 +1,0 @@
-module Fluent {
-    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Fluent.build/Fluent-Swift.h"
-    requires objc
-}
