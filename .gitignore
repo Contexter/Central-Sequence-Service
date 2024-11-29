@@ -77,3 +77,5 @@ docker-compose.yml
 *.plist
 Resources/.DS_Store
 .DS_Store
+Sources/.DS_Store
+Tests/.DS_Store
