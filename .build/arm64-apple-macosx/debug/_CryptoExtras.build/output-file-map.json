@@ -1,0 +1,167 @@
+{
+  "": {
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/master.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/AES_CBC.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CBC.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CBC.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CBC~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CBC.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/AES_CFB.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/AES_CTR.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/AES_GCM_SIV.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/Block Function.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Block Function.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Block Function.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Block Function~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Block Function.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/BoringSSL/AES_CFB_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CFB_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/BoringSSL/AES_CTR_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_CTR_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/AES/BoringSSL/AES_GCM_SIV_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/AES_GCM_SIV_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/ChaCha20CTR/BoringSSL/ChaCha20CTR_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/ChaCha20CTR/ChaCha20CTR.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/ChaCha20CTR.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Key Derivation/KDF.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/KDF.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/KDF.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/KDF~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/KDF.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Key Derivation/PBKDF2/BoringSSL/PBKDF2_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Key Derivation/PBKDF2/BoringSSL/PBKDF2_commoncrypto.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_commoncrypto.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_commoncrypto.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_commoncrypto~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2_commoncrypto.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Key Derivation/PBKDF2/PBKDF2.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PBKDF2.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Key Derivation/Scrypt/BoringSSL/Scrypt_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Key Derivation/Scrypt/Scrypt.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Scrypt.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/RSA/RSA+BlindSigning.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA+BlindSigning.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA+BlindSigning.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA+BlindSigning~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA+BlindSigning.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/RSA/RSA.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/RSA/RSA_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/RSA/RSA_security.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_security.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_security.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_security~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/RSA_security.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Util/BoringSSLHelpers.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/BoringSSLHelpers.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/BoringSSLHelpers.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/BoringSSLHelpers~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/BoringSSLHelpers.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Util/CryptoKitErrors_boring.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/CryptoKitErrors_boring.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/CryptoKitErrors_boring.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/CryptoKitErrors_boring~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/CryptoKitErrors_boring.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Util/DigestType.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/DigestType.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/DigestType.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/DigestType~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/DigestType.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Util/Error.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Error.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Error.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Error~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/Error.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Util/PEMDocument.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PEMDocument.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PEMDocument.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PEMDocument~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/PEMDocument.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-crypto/Sources/_CryptoExtras/Util/SubjectPublicKeyInfo.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/SubjectPublicKeyInfo.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/SubjectPublicKeyInfo.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/SubjectPublicKeyInfo~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/SubjectPublicKeyInfo.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/DerivedSources/resource_bundle_accessor.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/resource_bundle_accessor.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/resource_bundle_accessor.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/resource_bundle_accessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/_CryptoExtras.build/resource_bundle_accessor.swiftdeps"
+  }
+}

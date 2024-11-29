@@ -1,0 +1,11 @@
+{
+  "": {
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Numerics.build/master.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/swift-numerics/Sources/Numerics/Numerics.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Numerics.build/Numerics.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Numerics.build/Numerics.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Numerics.build/Numerics~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Numerics.build/Numerics.swiftdeps"
+  }
+}

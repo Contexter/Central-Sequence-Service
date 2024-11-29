@@ -1,0 +1,35 @@
+{
+  "": {
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/master.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/Sources/App/Providers/FileDataProvider.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/FileDataProvider.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/FileDataProvider.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/FileDataProvider~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/FileDataProvider.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/Sources/App/configure.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/configure.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/configure.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/configure~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/configure.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/Sources/App/entrypoint.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/entrypoint.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/entrypoint.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/entrypoint~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/entrypoint.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/Sources/App/routes.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/routes.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/routes.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/routes~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/routes.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/DerivedSources/resource_bundle_accessor.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/resource_bundle_accessor.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/resource_bundle_accessor.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/resource_bundle_accessor~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/App.build/resource_bundle_accessor.swiftdeps"
+  }
+}

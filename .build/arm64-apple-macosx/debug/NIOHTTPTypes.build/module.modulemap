@@ -1,0 +1,4 @@
+module NIOHTTPTypes {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/NIOHTTPTypes.build/NIOHTTPTypes-Swift.h"
+    requires objc
+}

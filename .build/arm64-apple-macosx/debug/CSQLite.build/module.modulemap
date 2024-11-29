@@ -1,0 +1,4 @@
+module CSQLite {
+    umbrella "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/checkouts/sqlite-nio/Sources/CSQLite/include"
+    export *
+}

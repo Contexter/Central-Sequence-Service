@@ -1,0 +1,4 @@
+module InternalCollectionsUtilities {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/InternalCollectionsUtilities.build/InternalCollectionsUtilities-Swift.h"
+    requires objc
+}

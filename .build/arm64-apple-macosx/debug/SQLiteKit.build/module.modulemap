@@ -1,0 +1,4 @@
+module SQLiteKit {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/SQLiteKit.build/SQLiteKit-Swift.h"
+    requires objc
+}

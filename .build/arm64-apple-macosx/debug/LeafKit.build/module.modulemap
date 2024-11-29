@@ -1,0 +1,4 @@
+module LeafKit {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/LeafKit.build/LeafKit-Swift.h"
+    requires objc
+}

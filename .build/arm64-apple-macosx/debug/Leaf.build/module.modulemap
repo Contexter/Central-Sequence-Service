@@ -1,0 +1,4 @@
+module Leaf {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/Leaf.build/Leaf-Swift.h"
+    requires objc
+}

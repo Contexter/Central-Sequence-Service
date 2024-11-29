@@ -1,0 +1,4 @@
+module ConsoleKitTerminal {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/ConsoleKitTerminal.build/ConsoleKitTerminal-Swift.h"
+    requires objc
+}

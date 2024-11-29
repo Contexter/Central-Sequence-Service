@@ -1,0 +1,4 @@
+module NIOHTTP2 {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/.build/arm64-apple-macosx/debug/NIOHTTP2.build/NIOHTTP2-Swift.h"
+    requires objc
+}
