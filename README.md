@@ -17,15 +17,17 @@ This documentation outlines the foundational approach to dynamically generate a 
 ## **Key Components**
 
 ### **1. OpenAPI Specification as Input**
-The OpenAPI specification (in YAML or JSON) provided by FountainAI acts as the blueprint for the entire application. The document defines:
+The OpenAPI specification for this service acts as the blueprint for the entire application. It defines:
 - **Paths**: API endpoints and HTTP methods.
 - **Schemas**: Request and response models.
 - **Parameters**: Query, path, and body parameters.
 - **Responses**: Expected results for each endpoint.
 - **Security**: Authentication and authorization mechanisms.
 
+You can find the OpenAPI specification for the **Central Sequence Service** [here](./Central-Sequence-Service.yml).
+
 ### **2. OpenAPIKit Integration**
-OpenAPIKit is the backbone of the parsing and validation process:
+[OpenAPIKit](https://github.com/mattpolzin/OpenAPIKit) is a Swift library used to parse and interact with OpenAPI documents. It is the backbone of this implementation, offering:
 - **Parsing**: Converts the OpenAPI document into structured Swift types.
 - **Validation**: Validates the document for compliance with OpenAPI 3.x standards.
 - **Schemas**: Provides `JSONSchema` for validating request and response payloads.
@@ -186,4 +188,4 @@ func configure(_ app: Application) throws {
 ---
 
 ### **Conclusion**
-This dynamic approach simplifies the creation of API-driven Vapor applications by leveraging OpenAPIKit and the OpenAPI specification as the single source of truth. It reduces manual effort, enhances consistency, and ensures standards compliance while offering high flexibility and scalability.
+This dynamic approach simplifies the creation of API-driven Vapor applications by leveraging [OpenAPIKit](https://github.com/mattpolzin/OpenAPIKit) and the OpenAPI specification as the single source of truth. It reduces manual effort, enhances consistency, and ensures standards compliance while offering high flexibility and scalability.
