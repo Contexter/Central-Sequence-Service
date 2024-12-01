@@ -1,10 +1,10 @@
-// swift-tools-version:6.0
+// swift-tools-version:5.7
 import PackageDescription
 
 let package = Package(
     name: "CentralSequenceService",
     platforms: [
-       .macOS(.v13)
+        .macOS(.v13)
     ],
     dependencies: [
         // 💧 A server-side Swift web framework.
@@ -17,6 +17,8 @@ let package = Package(
         .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
         // 📝 OpenAPI parsing and validation.
         .package(url: "https://github.com/mattpolzin/OpenAPIKit", from: "3.0.0"),
+        // 📄 YAML parsing (used by OpenAPIKit for decoding OpenAPI specs).
+        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0"),
     ],
     targets: [
         .executableTarget(
@@ -27,23 +29,19 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "NIOCore", package: "swift-nio"),
                 .product(name: "NIOPosix", package: "swift-nio"),
-                "OpenAPIKit"
+                "OpenAPIKit",
+                "Yams"
             ],
-            swiftSettings: swiftSettings
+            resources: [
+            ]
         ),
         .testTarget(
             name: "AppTests",
             dependencies: [
                 .target(name: "App"),
                 .product(name: "XCTVapor", package: "vapor"),
-            ],
-            swiftSettings: swiftSettings
+            ]
         )
     ],
-    swiftLanguageModes: [.v5]
+    swiftLanguageVersions: [.v5]
 )
-
-var swiftSettings: [SwiftSetting] { [
-    .enableUpcomingFeature("DisableOutwardActorInference"),
-    .enableExperimentalFeature("StrictConcurrency"),
-] }

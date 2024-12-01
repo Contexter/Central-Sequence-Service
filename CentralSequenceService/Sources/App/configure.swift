@@ -1,16 +1,18 @@
-import NIOSSL
 import Fluent
 import FluentSQLiteDriver
 import Vapor
 
-// configures your application
+// Configures your application
 public func configure(_ app: Application) async throws {
-    // uncomment to serve files from /Public folder
-    // app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
+    // Serve files from /Public folder
+    app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
+    // Database configuration
     app.databases.use(DatabaseConfigurationFactory.sqlite(.file("db.sqlite")), as: .sqlite)
 
-    app.migrations.add(CreateTodo())
-    // register routes
+    // Add migrations
+    app.migrations.add(CreateSequenceRecord())
+
+    // Register routes
     try routes(app)
 }
