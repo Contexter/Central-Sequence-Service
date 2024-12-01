@@ -5,13 +5,13 @@ final class OpenAPIMiddleware: Middleware {
         // Check if the request is for the OpenAPI specification
         if request.url.path == "/openapi" {
             let openAPIFilePath = request.application.directory.publicDirectory + "Central-Sequence-Service.yml"
-            
+
             // Check if the file exists
             if FileManager.default.fileExists(atPath: openAPIFilePath) {
                 do {
                     // Read file content
                     let openAPIContent = try Data(contentsOf: URL(fileURLWithPath: openAPIFilePath))
-                    
+
                     // Create response with YAML content
                     let response = Response(status: .ok, body: .init(data: openAPIContent))
                     response.headers.contentType = HTTPMediaType(type: "application", subType: "x-yaml")
