@@ -29,6 +29,6 @@ public func configure(_ app: Application) throws {
     // Add migrations
     app.migrations.add(CreateSequenceRecord())
 
-    // Register routes
-    try routes(app)
+    // Register routes through RoutesFactory
+    try RoutesFactory.registerRoutes(app)
 }

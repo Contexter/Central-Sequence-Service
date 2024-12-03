@@ -1,14 +1,17 @@
-import Fluent
 import Vapor
 
-func routes(_ app: Application) throws {
-    app.get { req async in
-        "It works!"
-    }
+struct RoutesFactory {
+    static func registerRoutes(_ app: Application) throws {
+        // Add default routes
+        app.get { req async in
+            "It works!"
+        }
 
-    app.get("hello") { req async -> String in
-        "Hello, world!"
-    }
+        app.get("hello") { req async -> String in
+            "Hello, world!"
+        }
 
-    try app.register(collection: TodoController())
+        // Register Sequence-related routes
+        try app.register(collection: SequenceRoutes())
+    }
 }
