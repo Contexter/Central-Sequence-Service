@@ -1,47 +1,39 @@
-// swift-tools-version:5.7
+// swift-tools-version:5.5
 import PackageDescription
 
 let package = Package(
     name: "CentralSequenceService",
     platforms: [
-        .macOS(.v13)
+        .macOS(.v12)
     ],
     dependencies: [
-        // 💧 A server-side Swift web framework.
-        .package(url: "https://github.com/vapor/vapor.git", from: "4.99.3"),
-        // 🗄 An ORM for SQL and NoSQL databases.
-        .package(url: "https://github.com/vapor/fluent.git", from: "4.9.0"),
-        // 🪶 Fluent driver for SQLite.
-        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.6.0"),
-        // 🔵 Non-blocking, event-driven networking for Swift. Used for custom executors.
-        .package(url: "https://github.com/apple/swift-nio.git", from: "2.65.0"),
-        // 📝 OpenAPI parsing and validation.
-        .package(url: "https://github.com/mattpolzin/OpenAPIKit", from: "3.0.0"),
-        // 📄 YAML parsing (used by OpenAPIKit for decoding OpenAPI specs).
-        .package(url: "https://github.com/jpsim/Yams.git", from: "5.0.0"),
+        .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
+        .package(url: "https://github.com/vapor/fluent-sqlite-driver.git", from: "4.0.0"),
+        .package(url: "https://github.com/mattpolzin/OpenAPIKit.git", from: "3.0.0"),
+        .package(url: "https://github.com/apple/swift-algorithms.git", from: "1.0.0"),
+        .package(url: "https://github.com/jpsim/Yams.git", from: "4.0.0")
     ],
     targets: [
-        .executableTarget(
+        .target(
             name: "App",
             dependencies: [
+                .product(name: "Vapor", package: "vapor"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
-                .product(name: "Vapor", package: "vapor"),
-                .product(name: "NIOCore", package: "swift-nio"),
-                .product(name: "NIOPosix", package: "swift-nio"),
-                "OpenAPIKit",
-                "Yams"
+                .product(name: "OpenAPIKit", package: "OpenAPIKit"),
+                .product(name: "Algorithms", package: "swift-algorithms"),
+                .product(name: "Yams", package: "Yams")
             ],
-            resources: [
-            ]
+            exclude: []
+        ),
+        .executableTarget(
+            name: "Run",
+            dependencies: ["App"]
         ),
         .testTarget(
             name: "AppTests",
-            dependencies: [
-                .target(name: "App"),
-                .product(name: "XCTVapor", package: "vapor"),
-            ]
+            dependencies: ["App"]
         )
-    ],
-    swiftLanguageVersions: [.v5]
+    ]
 )

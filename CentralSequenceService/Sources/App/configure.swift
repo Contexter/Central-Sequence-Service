@@ -1,31 +1,27 @@
+import Vapor
 import Fluent
 import FluentSQLiteDriver
-import Vapor
+import OpenAPIKit
+import Yams
 
-// Configures your application
+var openAPIDocument: OpenAPI.Document!
+
 public func configure(_ app: Application) throws {
     // Serve files from /Public folder
     app.middleware.use(FileMiddleware(publicDirectory: app.directory.publicDirectory))
 
-    // Commented out Simplified Validation Middleware
-    /*
-    let validationMiddleware = SimplifiedValidationMiddleware(
-        supportedMethods: [.POST, .PUT],
-        requiredFields: ["name", "email"]
-    )
-    app.middleware.use(validationMiddleware)
-    */
+    // Load the OpenAPI specification
+    let specPath = app.directory.publicDirectory + "Central-Sequence-Service.yml"
+    do {
+        let yamlString = try String(contentsOfFile: specPath)
+        let decoded = try YAMLDecoder().decode(OpenAPI.Document.self, from: yamlString)
+        openAPIDocument = decoded
+    } catch {
+        fatalError("Failed to load OpenAPI specification: \(error.localizedDescription)")
+    }
 
-    // Commented out OpenAPIMiddleware
-    /*
-    app.middleware.use(OpenAPIMiddleware())
-    */
-
-    // Commented out OpenAPIValidationMiddleware
-    /*
-    let openAPIDocument = try OpenAPI.Document(fromYAMLFileAtPath: app.directory.publicDirectory + "Central-Sequence-Service.yml")
-    app.middleware.use(OpenAPIValidationMiddleware(openAPIDocument: openAPIDocument))
-    */
+    // Add middleware
+    app.middleware.use(ValidationMiddleware(openAPIDocument: openAPIDocument))
 
     // Database configuration
     app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
