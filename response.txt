@@ -1,0 +1,1 @@
+{"context":"Ensure the method matches the OpenAPI specification.","suggestion":"Use one of the allowed methods: .","reason":"HTTP method POST is not allowed for the requested path."}

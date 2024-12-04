@@ -1,17 +1,15 @@
 import Vapor
 
 struct RoutesFactory {
-    static func registerRoutes(_ app: Application) throws {
-        // Add default routes
-        app.get { req async in
-            "It works!"
+    static func registerRoutes(on app: Application) throws {
+        app.post("sequence") { req -> String in
+            // Placeholder business logic, replace with real implementation
+            return "Sequence generation endpoint reached."
         }
 
-        app.get("hello") { req async -> String in
-            "Hello, world!"
+        app.put("sequence", "reorder") { req -> String in
+            // Placeholder business logic, replace with real implementation
+            return "Reorder endpoint reached."
         }
-
-        // Register Sequence-related routes
-        try app.register(collection: SequenceRoutes())
     }
 }
