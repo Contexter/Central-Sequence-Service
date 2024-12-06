@@ -1,0 +1,4 @@
+module NIOExtras {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/NIOExtras.build/NIOExtras-Swift.h"
+    requires objc
+}

@@ -1,0 +1,4 @@
+module FluentSQLiteDriver {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/FluentSQLiteDriver.build/FluentSQLiteDriver-Swift.h"
+    requires objc
+}

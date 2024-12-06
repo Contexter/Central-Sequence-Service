@@ -1,0 +1,17 @@
+{
+  "": {
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/master.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/checkouts/OpenAPIKit/Sources/OpenAPIKitCompat/Compat30To31.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Compat30To31.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Compat30To31.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Compat30To31~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Compat30To31.swiftdeps"
+  },
+  "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/checkouts/OpenAPIKit/Sources/OpenAPIKitCompat/Either+Map.swift": {
+    "dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Either+Map.d",
+    "object": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Either+Map.swift.o",
+    "swiftmodule": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Either+Map~partial.swiftmodule",
+    "swift-dependencies": "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/OpenAPIKitCompat.build/Either+Map.swiftdeps"
+  }
+}

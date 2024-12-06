@@ -1,0 +1,4 @@
+module CentralSequenceServicePackageTests {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/CentralSequenceServicePackageTests.build/CentralSequenceServicePackageTests-Swift.h"
+    requires objc
+}

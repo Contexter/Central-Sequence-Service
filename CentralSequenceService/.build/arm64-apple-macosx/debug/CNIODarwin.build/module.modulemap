@@ -1,0 +1,4 @@
+module CNIODarwin {
+    umbrella header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/checkouts/swift-nio/Sources/CNIODarwin/include/CNIODarwin.h"
+    export *
+}

@@ -1,0 +1,4 @@
+module Yams {
+    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/Yams.build/Yams-Swift.h"
+    requires objc
+}
