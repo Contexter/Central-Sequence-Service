@@ -1,4 +1,0 @@
-module ConsoleKitCommands {
-    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/ConsoleKitCommands.build/ConsoleKitCommands-Swift.h"
-    requires objc
-}

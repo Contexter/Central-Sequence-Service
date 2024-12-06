@@ -1,4 +1,0 @@
-module NIOTestUtils {
-    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/NIOTestUtils.build/NIOTestUtils-Swift.h"
-    requires objc
-}

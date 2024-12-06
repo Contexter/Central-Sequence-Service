@@ -1,4 +1,0 @@
-module AsyncKit {
-    header "/Users/benedikteickhoff/Development/Github-Desktop/Central-Sequence-Service/CentralSequenceService/.build/arm64-apple-macosx/debug/AsyncKit.build/AsyncKit-Swift.h"
-    requires objc
-}
