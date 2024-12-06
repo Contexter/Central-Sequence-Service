@@ -1,48 +1,63 @@
-# Central Sequence Service Implementation Guide
+# **Central Sequence Service Implementation Guide**
 
-This guide provides a comprehensive, step-by-step tutorial for implementing the **Central Sequence Service** with SQLite persistence, Typesense integration, and API endpoint definitions based on OpenAPI. The goal is to deliver a fully functional backend service capable of managing sequence numbers with robust synchronization and searchability.
+This guide provides a complete, step-by-step tutorial for implementing the **Central Sequence Service** using **Swift**, **SQLite**, **Typesense**, and **OpenAPI**. The goal is to deliver a fully functional backend service capable of managing sequence numbers with robust synchronization, fault tolerance, and searchability.
 
 ---
 
 ## **Overview**
 
-The Central Sequence Service manages sequence numbers for various story elements, such as scripts, characters, actions, etc. It includes the following capabilities:
-- Persisting sequence data in SQLite.
-- Synchronizing with a **Typesense** search engine for real-time search.
-- API endpoints for creating, updating, and retrieving sequence numbers.
-- Fault-tolerant retry mechanisms for Typesense integration.
+The **Central Sequence Service** is responsible for generating and managing sequence numbers for various story elements, such as scripts, sections, characters, actions, and spoken words. Its core features include:
+- **SQLite persistence** for reliable storage.
+- **Typesense integration** for real-time search capabilities.
+- **API endpoints** for creating, updating, and retrieving sequence numbers, compliant with OpenAPI standards.
+- **Fault-tolerant retry mechanisms** for syncing with Typesense in case of failures.
 
 ---
 
 ## **1. Prerequisites**
 
-Ensure the following tools and software are installed:
+Before starting, ensure you have the following tools and libraries installed on your system:
 - **Swift 5.8** or higher.
-- **Typesense** (Docker for local setup).
-- **SQLite** installed (or available through the SQLite.swift library).
+- **Typesense** (via Docker for local testing).
+- **SQLite** installed or accessible through the SQLite.swift library.
 - **Git** for version control.
-- **cURL** or a similar tool for testing API endpoints.
+- **cURL** or a similar tool for API endpoint testing.
 
 ---
 
-## **2. Set Up the Project**
+## **2. Project Setup**
 
-### Initialize a New Swift Package
-1. Create a directory for the service:
+### **Initialize the Repository**
+1. Create a directory for the project:
    ```bash
    mkdir CentralSequenceService
    cd CentralSequenceService
    ```
-2. Initialize a new Swift package:
+
+2. Initialize a Swift executable package:
    ```bash
    swift package init --type executable
    ```
 
+3. Adjust the directory structure:
+   - Create subdirectories for your targets:
+     ```bash
+     mkdir -p Sources/CentralSequenceService
+     mkdir -p Sources/Run
+     ```
+
+4. Move the `main.swift` file to `Sources/Run/`:
+   ```bash
+   mv Sources/main.swift Sources/Run/main.swift
+   ```
+
 ---
 
-## **3. Update Dependencies**
+## **3. Dependencies**
 
-Edit `Package.swift` to include necessary dependencies:
+### **Edit `Package.swift`**
+
+Add the following dependencies to your `Package.swift` file:
 
 ```swift
 // swift-tools-version: 5.8
@@ -56,7 +71,7 @@ let package = Package(
     dependencies: [
         .package(url: "https://github.com/apple/swift-openapi-generator.git", from: "0.1.0"),
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
-        .package(url: "https://github.com/apple/swift-openapi-vapor.git", from: "0.1.0"),
+        .package(url: "https://github.com/swift-server/swift-openapi-vapor.git", from: "1.0.1"),
         .package(url: "https://github.com/stephencelis/SQLite.swift.git", from: "0.12.0"),
         .package(url: "https://github.com/typesense/typesense-swift.git", from: "0.2.0")
     ],
@@ -68,7 +83,7 @@ let package = Package(
                 .product(name: "OpenAPIRuntime", package: "swift-openapi-generator"),
                 .product(name: "OpenAPIVapor", package: "swift-openapi-vapor"),
                 .product(name: "SQLite", package: "SQLite.swift"),
-                .product(name: "Typesense", package: "typesense-swift"),
+                .product(name: "Typesense", package: "typesense-swift")
             ],
             plugins: [
                 .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator")
@@ -82,22 +97,24 @@ let package = Package(
 )
 ```
 
-Update dependencies:
+### **Install Dependencies**
 
+Run the following command to fetch and resolve the dependencies:
 ```bash
 swift package update
 ```
 
 ---
 
-## **4. Prepare the OpenAPI Specification**
+## **4. OpenAPI Integration**
 
-### Save the OpenAPI Specification
-Save the provided OpenAPI specification as `central-sequence-service.yaml` in the project root.
+### **Save the OpenAPI Specification**
 
-### Configure OpenAPI Generator
-Add a configuration file, `openapi-generator.json`:
+Save the provided OpenAPI specification as `central-sequence-service.yaml` in the root of your project directory.
 
+### **Configure OpenAPI Generator**
+
+Create a configuration file named `openapi-generator.json`:
 ```json
 {
     "input": "./central-sequence-service.yaml",
@@ -105,19 +122,20 @@ Add a configuration file, `openapi-generator.json`:
 }
 ```
 
-Run the generator to create models and stubs:
+### **Generate OpenAPI Models and Stubs**
 
+Run the Swift OpenAPI generator to create models and server stubs:
 ```bash
 swift package plugin generate-openapi
 ```
 
 ---
 
-## **5. Implement the Service**
+## **5. Service Implementation**
 
-### SQLite Integration
-Add a new file `DatabaseManager.swift`:
+### **SQLite Integration**
 
+Create a file named `Sources/CentralSequenceService/DatabaseManager.swift`:
 ```swift
 import SQLite
 
@@ -161,9 +179,9 @@ struct DatabaseManager {
 
 ---
 
-### Typesense Integration
-Add a file `TypesenseManager.swift`:
+### **Typesense Integration**
 
+Create a file named `Sources/CentralSequenceService/TypesenseManager.swift`:
 ```swift
 import Typesense
 
@@ -223,9 +241,9 @@ class TypesenseManager {
 
 ---
 
-### Service Logic
-Implement the main service in `Service.swift`:
+### **Service Logic**
 
+Create `Sources/CentralSequenceService/Service.swift`:
 ```swift
 import Vapor
 import OpenAPIVapor
@@ -252,9 +270,9 @@ struct CentralSequenceService: Generated.APIProtocol {
 
 ---
 
-### Configure Vapor
-In `main.swift`:
+### **Vapor Configuration**
 
+Edit `Sources/Run/main.swift`:
 ```swift
 import Vapor
 import OpenAPIVapor
@@ -274,31 +292,32 @@ struct CentralSequenceServiceMain {
 
 ---
 
-## **6. Test the Service**
+## **6. Testing**
 
-### Start Typesense
-Run a local Typesense server:
+### **Start Typesense**
 
+Run a local Typesense server using Docker:
 ```bash
 docker run -d -p 8108:8108 -v/tmp/typesense-data:/data typesense/typesense:0.24.0 --data-dir /data --api-key=YOUR_API_KEY
 ```
 
-### Start the Service
-Run the service:
+### **Run the Service**
 
+Start the service:
 ```bash
-swift run
+swift run Run
 ```
 
-### Test API Endpoints
-- **Generate Sequence**:
+### **Test the API**
+
+- Generate a sequence:
   ```bash
   curl -X POST http://localhost:8080/sequence \
        -H "Content-Type: application/json" \
        -d '{"elementType": "script", "elementId": 1, "comment": "Creating a sequence."}'
   ```
 
-- **Query Typesense**:
+- Query Typesense:
   ```bash
   curl -X GET "http://localhost:8108/collections/sequences/documents" \
        -H "X-TYPESENSE-API-KEY: YOUR_API_KEY"
@@ -308,4 +327,4 @@ swift run
 
 ## **Conclusion**
 
-This tutorial covers the full implementation of the **Central Sequence Service**, integrating SQLite for persistence and Typesense for search. The service is scalable, fault-tolerant, and OpenAPI-compliant, providing robust sequence management for any story-driven application.
+This guide provides a robust and scalable implementation of the Central Sequence Service, featuring SQLite for persistence, Typesense for search, and full OpenAPI compliance. By following these steps, you’ll have a fully operational backend service tailored for managing sequence data in any application.
