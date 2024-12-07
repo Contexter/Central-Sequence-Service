@@ -1,34 +1,57 @@
-# **Central Sequence Service Implementation Guide**
+# Central Sequence Service Implementation Guide
 
-This guide provides a complete, step-by-step tutorial for implementing the **Central Sequence Service** using **Swift**, **SQLite**, **Typesense**, and **OpenAPI**. The goal is to deliver a fully functional backend service capable of managing sequence numbers with robust synchronization, fault tolerance, and searchability.
+This guide will show you how to implement the **Central Sequence Service**, an API designed to manage sequence numbers for story elements. We will cover:
 
----
+- **Project Setup & Structure**
+- **OpenAPI Integration**
+- **Database (SQLite) Management**
+- **Typesense Integration**
+- **Core Service Logic & Endpoints**
+- **Error Handling & Retry Mechanisms**
+- **Testing & Validation**
+- **CI/CD & Deployment Considerations**
 
-## **Overview**
-
-The **Central Sequence Service** is responsible for generating and managing sequence numbers for various story elements, such as scripts, sections, characters, actions, and spoken words. Its core features include:
-- **SQLite persistence** for reliable storage.
-- **Typesense integration** for real-time search capabilities.
-- **API endpoints** for creating, updating, and retrieving sequence numbers, compliant with OpenAPI standards.
-- **Fault-tolerant retry mechanisms** for syncing with Typesense in case of failures.
+The final service will be a Swift-based server using Vapor, leveraging SQLite for storage and Typesense for search indexing. It will comply with the OpenAPI specification provided, ensuring interoperability, discoverability, and clear documentation of your API.
 
 ---
 
 ## **1. Prerequisites**
 
-Before starting, ensure you have the following tools and libraries installed on your system:
-- **Swift 5.8** or higher.
-- **Typesense** (via Docker for local testing).
-- **SQLite** installed or accessible through the SQLite.swift library.
-- **Git** for version control.
-- **cURL** or a similar tool for API endpoint testing.
+Before beginning, ensure you have the following:
+
+- **Swift 5.8+:**  
+  Install or upgrade from [swift.org](https://www.swift.org/download/).
+  
+- **Vapor CLI (optional):**  
+  ```bash
+  brew tap vapor/homebrew-tap
+  brew install vapor
+  ```
+  
+- **SQLite:**  
+  SQLite is typically bundled with macOS and Linux distributions. If needed, see [SQLite Installation Instructions](https://www.sqlite.org/download.html).
+
+- **Typesense:**  
+  Run a local Typesense instance using Docker:  
+  ```bash
+  docker run -d -p 8108:8108 -v/tmp/typesense-data:/data typesense/typesense:0.24.0 \
+    --data-dir /data --api-key=YOUR_API_KEY
+  ```
+  Replace `YOUR_API_KEY` with a secure key you choose.
+
+- **Git:**  
+  For version control, if desired.
+
+- **cURL or HTTP Client:**  
+  To test your API endpoints.
 
 ---
 
 ## **2. Project Setup**
 
-### **Initialize the Repository**
-1. Create a directory for the project:
+### **Initialize the Swift Package**
+
+1. Create and navigate into your project directory:
    ```bash
    mkdir CentralSequenceService
    cd CentralSequenceService
@@ -39,28 +62,51 @@ Before starting, ensure you have the following tools and libraries installed on 
    swift package init --type executable
    ```
 
-3. Adjust the directory structure:
-   - Create subdirectories for your targets:
-     ```bash
-     mkdir -p Sources/CentralSequenceService
-     mkdir -p Sources/Run
-     ```
+Your structure now looks like this:
+```
+CentralSequenceService/
+  ├─ Package.swift
+  ├─ Sources/
+  │   └─ CentralSequenceService/
+  │       └─ main.swift
+  └─ Tests/
+```
 
-4. Move the `main.swift` file to `Sources/Run/`:
+3. For clarity, we’ll separate the run target from the service logic:
    ```bash
-   mv Sources/main.swift Sources/Run/main.swift
+   mkdir -p Sources/CentralSequenceService Sources/Run
+   mv Sources/CentralSequenceService/main.swift Sources/Run/main.swift
    ```
+
+After this, your structure might be:
+```
+CentralSequenceService/
+  ├─ Package.swift
+  ├─ Sources/
+  │   ├─ CentralSequenceService/
+  │   └─ Run/
+  │       └─ main.swift
+  └─ Tests/
+```
 
 ---
 
 ## **3. Dependencies**
 
+We will use the following dependencies:
+
+- **Vapor:** For server and routing.
+- **Swift OpenAPI Generator:** To generate OpenAPI-compliant code from our spec.
+- **SQLite.swift:** For SQLite database interaction.
+- **Typesense Swift:** For indexing and searching sequence data.
+- **swift-openapi-vapor:** Integration layer for OpenAPI and Vapor.
+
 ### **Edit `Package.swift`**
 
-Add the following dependencies to your `Package.swift` file:
+Open `Package.swift` and add the dependencies:
 
 ```swift
-// swift-tools-version: 5.8
+// swift-tools-version:5.8
 import PackageDescription
 
 let package = Package(
@@ -92,14 +138,17 @@ let package = Package(
         .executableTarget(
             name: "Run",
             dependencies: ["CentralSequenceService"]
+        ),
+        .testTarget(
+            name: "CentralSequenceServiceTests",
+            dependencies: ["CentralSequenceService", "XCTVapor"]
         )
     ]
 )
 ```
 
-### **Install Dependencies**
+### **Fetch & Resolve Dependencies**
 
-Run the following command to fetch and resolve the dependencies:
 ```bash
 swift package update
 ```
@@ -108,34 +157,45 @@ swift package update
 
 ## **4. OpenAPI Integration**
 
-### **Save the OpenAPI Specification**
+Save the provided OpenAPI specification into the project root:
 
-Save the provided OpenAPI specification as `central-sequence-service.yaml` in the root of your project directory.
+**`central-sequence-service.yaml`**
 
-### **Configure OpenAPI Generator**
+*(The specification was provided in the initial request. Ensure it matches exactly the file in your project.)*
 
-Create a configuration file named `openapi-generator.json`:
+### **Configure the Generator**
+
+Create a `openapi-generator.json` config file to instruct the plugin:
+
 ```json
 {
-    "input": "./central-sequence-service.yaml",
-    "output": "./Sources/CentralSequenceService/Generated"
+  "input": "./central-sequence-service.yaml",
+  "output": "./Sources/CentralSequenceService/Generated"
 }
 ```
 
-### **Generate OpenAPI Models and Stubs**
+### **Generate the OpenAPI Code**
 
-Run the Swift OpenAPI generator to create models and server stubs:
+Run:
+
 ```bash
 swift package plugin generate-openapi
 ```
 
+This command uses the Swift OpenAPI Generator plugin to:
+- Parse the YAML file.
+- Generate corresponding Swift types, request and response models, and handler protocol stubs into `Sources/CentralSequenceService/Generated`.
+
 ---
 
-## **5. Service Implementation**
+## **5. Database Integration (SQLite)**
 
-### **SQLite Integration**
+We will use SQLite to persist and retrieve sequence numbers for each element. A simple schema includes a `sequences` table with columns: `id` (a string concatenation of elementType and elementId), and `sequenceNumber` (an integer).
 
-Create a file named `Sources/CentralSequenceService/DatabaseManager.swift`:
+### **Implementing `DatabaseManager`**
+
+Create a file: `Sources/CentralSequenceService/DatabaseManager.swift`
+
 ```swift
 import SQLite
 
@@ -160,18 +220,43 @@ struct DatabaseManager {
         })
     }
 
-    func incrementSequence(for id: String) -> Int {
+    /// Increments the sequence number for a given element or initializes it if it doesn’t exist.
+    func incrementSequence(for uniqueID: String) -> Int {
         let sequences = Table("sequences")
         let sequenceNumber = Expression<Int>("sequenceNumber")
         let rowID = Expression<String>("id")
 
-        if let current = try? db.pluck(sequences.filter(rowID == id)) {
+        if let current = try? db.pluck(sequences.filter(rowID == uniqueID)) {
             let newSequence = current[sequenceNumber] + 1
-            try! db.run(sequences.filter(rowID == id).update(sequenceNumber <- newSequence))
+            try! db.run(sequences.filter(rowID == uniqueID).update(sequenceNumber <- newSequence))
             return newSequence
         } else {
-            try! db.run(sequences.insert(rowID <- id, sequenceNumber <- 1))
+            try! db.run(sequences.insert(rowID <- uniqueID, sequenceNumber <- 1))
             return 1
+        }
+    }
+
+    /// Reorder sequences in batch.
+    func reorderSequences(_ updates: [(String, Int)]) {
+        let sequences = Table("sequences")
+        let sequenceNumber = Expression<Int>("sequenceNumber")
+        let rowID = Expression<String>("id")
+
+        for (idValue, newSeq) in updates {
+            try! db.run(sequences.filter(rowID == idValue).update(sequenceNumber <- newSeq))
+        }
+    }
+
+    /// Insert a new version or update existing one (if needed).
+    func setSequence(for uniqueID: String, to sequence: Int) {
+        let sequences = Table("sequences")
+        let sequenceNumber = Expression<Int>("sequenceNumber")
+        let rowID = Expression<String>("id")
+
+        if let _ = try? db.pluck(sequences.filter(rowID == uniqueID)) {
+            try! db.run(sequences.filter(rowID == uniqueID).update(sequenceNumber <- sequence))
+        } else {
+            try! db.run(sequences.insert(rowID <- uniqueID, sequenceNumber <- sequence))
         }
     }
 }
@@ -179,9 +264,14 @@ struct DatabaseManager {
 
 ---
 
-### **Typesense Integration**
+## **6. Typesense Integration**
 
-Create a file named `Sources/CentralSequenceService/TypesenseManager.swift`:
+Typesense indexes the sequences for quick search and retrieval. We will create or upsert documents whenever we update a sequence number.
+
+### **Implementing `TypesenseManager`**
+
+Create `Sources/CentralSequenceService/TypesenseManager.swift`:
+
 ```swift
 import Typesense
 
@@ -192,14 +282,8 @@ class TypesenseManager {
 
     private init() {
         let configuration = Configuration(
-            nodes: [
-                Node(
-                    host: "localhost",
-                    port: "8108",
-                    protocol: "http"
-                )
-            ],
-            apiKey: "YOUR_API_KEY"
+            nodes: [ Node(host: "localhost", port: "8108", protocol: "http") ],
+            apiKey: "YOUR_API_KEY" // Replace with your Typesense API key.
         )
         self.client = Client(configuration: configuration)
         setupCollection()
@@ -216,63 +300,150 @@ class TypesenseManager {
             defaultSortingField: "sequenceNumber"
         )
 
+        // Create or ensure existing collection.
         do {
-            _ = try client.collections.create(schema: schema)
+            let collections = try client.collections.retrieve()
+            if !collections.contains(where: { $0.name == "sequences" }) {
+                _ = try client.collections.create(schema: schema)
+            }
         } catch {
             print("Collection setup failed: \(error)")
         }
     }
 
-    func indexSequence(elementType: String, elementId: Int, sequenceNumber: Int) {
+    func indexSequence(elementType: String, elementId: Int, sequenceNumber: Int) throws {
         let document: [String: Any] = [
             "elementType": elementType,
             "elementId": elementId,
             "sequenceNumber": sequenceNumber
         ]
-
-        do {
-            _ = try client.documents(collectionName: "sequences").upsert(document: document)
-        } catch {
-            print("Failed to index sequence: \(error)")
-        }
+        try client.documents(collectionName: "sequences").upsert(document: document)
     }
 }
 ```
 
 ---
 
-### **Service Logic**
+## **7. Core Service Logic**
+
+We’ll implement the API protocol defined by the generated OpenAPI interfaces. The OpenAPI generator created a protocol `APIProtocol` with stubs matching our endpoints. We will implement these in a `Service.swift` file.
 
 Create `Sources/CentralSequenceService/Service.swift`:
+
 ```swift
 import Vapor
+import OpenAPIRuntime
 import OpenAPIVapor
 import Generated
 
-struct CentralSequenceService: Generated.APIProtocol {
+struct CentralSequenceService: APIProtocol {
     func generateSequenceNumber(
         input: SequenceRequest,
         context: OpenAPIRuntime.ServerRequestContext
     ) async throws -> SequenceResponse {
-        let newSequence = DatabaseManager.shared.incrementSequence(for: input.elementId.description)
+        let uniqueID = "\(input.elementType)-\(input.elementId)"
+        let newSequence = DatabaseManager.shared.incrementSequence(for: uniqueID)
 
-        // Synchronize with Typesense
-        TypesenseManager.shared.indexSequence(
-            elementType: input.elementType,
-            elementId: input.elementId,
-            sequenceNumber: newSequence
-        )
+        // Synchronize with Typesense (with simple retry)
+        do {
+            try TypesenseManager.shared.indexSequence(
+                elementType: input.elementType,
+                elementId: input.elementId,
+                sequenceNumber: newSequence
+            )
+        } catch {
+            // Retry logic can be more robust; for brevity just retry once
+            print("Failed to index with Typesense, retrying...")
+            do {
+                try TypesenseManager.shared.indexSequence(
+                    elementType: input.elementType,
+                    elementId: input.elementId,
+                    sequenceNumber: newSequence
+                )
+            } catch {
+                // If still fails, throw an appropriate error
+                throw ServerError(.badGateway, message: "Failed to synchronize with Typesense.")
+            }
+        }
 
         return SequenceResponse(sequenceNumber: newSequence, comment: "Sequence generated successfully.")
+    }
+
+    func reorderElements(
+        input: ReorderRequest,
+        context: OpenAPIRuntime.ServerRequestContext
+    ) async throws -> ReorderResponse {
+        // Prepare updates
+        let updates: [(String, Int)] = input.elements.map { elem in
+            ("\(input.elementType)-\(elem.elementId)", elem.newSequence)
+        }
+
+        // Update SQLite
+        DatabaseManager.shared.reorderSequences(updates)
+
+        // Synchronize with Typesense
+        // If any fails, we retry or handle errors accordingly
+        for (idValue, newSeq) in updates {
+            let parts = idValue.split(separator: "-")
+            guard parts.count == 2,
+                  let elementId = Int(parts[1])
+            else {
+                continue
+            }
+
+            do {
+                try TypesenseManager.shared.indexSequence(
+                    elementType: String(parts[0]),
+                    elementId: elementId,
+                    sequenceNumber: newSeq
+                )
+            } catch {
+                // Retry logic or handle errors here
+                throw ServerError(.badGateway, message: "Failed to synchronize with Typesense.")
+            }
+        }
+
+        let updatedElements = input.elements.map { ReorderResponse.UpdatedElements(elementId: $0.elementId, newSequence: $0.newSequence) }
+        return ReorderResponse(updatedElements: updatedElements, comment: "Elements reordered successfully.")
+    }
+
+    func createVersion(
+        input: VersionRequest,
+        context: OpenAPIRuntime.ServerRequestContext
+    ) async throws -> VersionResponse {
+        // For simplicity, we’ll treat "versioning" as incrementing a sequence number or setting it to a specific value.
+        // In a real application, you'd store version info and other metadata as well.
+        
+        let uniqueID = "\(input.elementType)-\(input.elementId)"
+
+        // Suppose every version increment just bumps the existing sequence by 1
+        let newSequence = DatabaseManager.shared.incrementSequence(for: uniqueID)
+
+        // Synchronize with Typesense
+        do {
+            try TypesenseManager.shared.indexSequence(
+                elementType: input.elementType,
+                elementId: input.elementId,
+                sequenceNumber: newSequence
+            )
+        } catch {
+            // Retry logic or error handling
+            throw ServerError(.badGateway, message: "Failed to synchronize with Typesense.")
+        }
+
+        return VersionResponse(versionNumber: newSequence, comment: "New version created successfully.")
     }
 }
 ```
 
+**Note:** The above code uses a simplistic versioning approach. You could store actual version data in separate tables and track them more rigorously depending on your application’s needs.
+
 ---
 
-### **Vapor Configuration**
+## **8. Vapor Configuration**
 
-Edit `Sources/Run/main.swift`:
+Edit `Sources/Run/main.swift` to boot the Vapor app and register our API:
+
 ```swift
 import Vapor
 import OpenAPIVapor
@@ -284,7 +455,15 @@ struct CentralSequenceServiceMain {
         let app = Application()
         defer { app.shutdown() }
 
+        // Register OpenAPI-defined API implementations
         try app.registerAPI(CentralSequenceService())
+
+        // Optionally, serve OpenAPI spec at a route:
+        // app.get("openapi.json") { req -> Response in
+        //     let jsonData = try Data(contentsOf: URL(fileURLWithPath: "central-sequence-service.yaml"))
+        //     return Response(body: Response.Body(data: jsonData))
+        // }
+
         try app.run()
     }
 }
@@ -292,39 +471,144 @@ struct CentralSequenceServiceMain {
 
 ---
 
-## **6. Testing**
+## **9. Error Handling and Retry Mechanisms**
 
-### **Start Typesense**
+In a production environment, you’ll need more robust error handling and retry logic:
 
-Run a local Typesense server using Docker:
-```bash
-docker run -d -p 8108:8108 -v/tmp/typesense-data:/data typesense/typesense:0.24.0 --data-dir /data --api-key=YOUR_API_KEY
+- **Retry Policies:**  
+  Implement exponential backoff for Typesense indexing failures.
+- **Custom Errors:**  
+  Throw `ServerError` or custom errors, and convert them to OpenAPI-defined error responses.
+
+You can wrap Typesense indexing in a small function that retries a few times before giving up:
+
+```swift
+func safeIndexSequence(elementType: String, elementId: Int, sequenceNumber: Int, attempts: Int = 3) throws {
+    var remaining = attempts
+    while remaining > 0 {
+        do {
+            try TypesenseManager.shared.indexSequence(
+                elementType: elementType,
+                elementId: elementId,
+                sequenceNumber: sequenceNumber
+            )
+            return
+        } catch {
+            remaining -= 1
+            if remaining == 0 {
+                throw ServerError(.badGateway, message: "Failed to synchronize with Typesense after multiple attempts.")
+            }
+        }
+    }
+}
 ```
 
-### **Run the Service**
+Integrate this helper into your main service methods as needed.
 
-Start the service:
-```bash
-swift run Run
+---
+
+## **10. Testing & Validation**
+
+### **Unit Tests**
+
+Create tests under `Tests/CentralSequenceServiceTests`. For example, `SequenceTests.swift`:
+
+```swift
+import XCTVapor
+@testable import CentralSequenceService
+
+final class SequenceTests: XCTestCase {
+    func testGenerateSequenceNumber() throws {
+        let app = Application(.testing)
+        defer { app.shutdown() }
+        try app.registerAPI(CentralSequenceService())
+
+        let reqBody = """
+        {
+          "elementType": "script",
+          "elementId": 1,
+          "comment": "Creating a sequence."
+        }
+        """
+
+        try app.test(.POST, "/sequence", beforeRequest: { req in
+            try req.content.encode(json: reqBody)
+        }, afterResponse: { res in
+            XCTAssertEqual(res.status, .created)
+        })
+    }
+}
 ```
 
-### **Test the API**
+Run tests:
+```bash
+swift test
+```
 
-- Generate a sequence:
-  ```bash
-  curl -X POST http://localhost:8080/sequence \
-       -H "Content-Type: application/json" \
-       -d '{"elementType": "script", "elementId": 1, "comment": "Creating a sequence."}'
+### **Integration Tests**
+
+You can also run integration tests against a running instance of the service and a running Typesense instance.
+
+### **OpenAPI Validation**
+
+Use tools like [Speccy](https://github.com/wework/speccy) or [Redocly CLI](https://redocly.com/docs/cli/) to validate your `central-sequence-service.yaml`.
+
+---
+
+## **11. Continuous Integration & Deployment**
+
+- **CI Tools:**  
+  Use GitHub Actions or GitLab CI to run `swift test` on every commit.
+
+- **Linting & Style Checks:**  
+  Integrate [SwiftLint](https://github.com/realm/SwiftLint) to maintain code quality.
+
+- **Containerization:**  
+  Create a `Dockerfile` for deployment:
+  ```dockerfile
+  FROM swift:5.8-focal as builder
+  WORKDIR /app
+  COPY . .
+  RUN swift build -c release --disable-sandbox
+
+  FROM ubuntu:20.04
+  WORKDIR /app
+  COPY --from=builder /app/.build/release/Run .
+  EXPOSE 8080
+  CMD ["./Run"]
   ```
 
-- Query Typesense:
-  ```bash
-  curl -X GET "http://localhost:8108/collections/sequences/documents" \
-       -H "X-TYPESENSE-API-KEY: YOUR_API_KEY"
-  ```
+- **Deployment:**  
+  Push the image to a registry and run on a cloud platform, ensuring access to your Typesense service.
+
+---
+
+## **12. Production Considerations**
+
+- **Scalability:**  
+  For high-load environments, consider using PostgreSQL or another more scalable database. SQLite can be a single-node embedded database suitable for smaller applications.
+  
+- **Security:**  
+  Protect the API endpoints using `X-API-KEY` or OAuth. The OpenAPI spec includes an `apiKeyAuth` header scheme.  
+  Validate API keys in a middleware before handling requests.
+
+- **Load Balancing & Caching:**  
+  If performance is critical, cache responses or apply a load balancer in front of multiple service instances.
+
+- **Monitoring & Logging:**  
+  Use Vapor’s logging and integrate with a monitoring solution like Prometheus or Datadog.
 
 ---
 
 ## **Conclusion**
 
-This guide provides a robust and scalable implementation of the Central Sequence Service, featuring SQLite for persistence, Typesense for search, and full OpenAPI compliance. By following these steps, you’ll have a fully operational backend service tailored for managing sequence data in any application.
+This comprehensive guide has walked you through:
+
+1. **Setting up a Swift-based backend with Vapor.**
+2. **Defining endpoints via OpenAPI and generating code stubs automatically.**
+3. **Implementing persistent storage via SQLite.**
+4. **Integrating with Typesense for real-time search indexing.**
+5. **Implementing robust error handling, retries, and test coverage.**
+6. **Preparing for production deployment with CI/CD, containerization, and security.**
+
+By following these steps, you have a fully operational, extensible, and maintainable Central Sequence Service ready for integration into larger storytelling or content management systems.
