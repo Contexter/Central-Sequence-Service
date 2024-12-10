@@ -1,4 +1,16 @@
-// The Swift Programming Language
-// https://docs.swift.org/swift-book
+// Sources/main.swift
+import Vapor
 
-print("Hello, world!")
+@main
+struct Run {
+    static func main() throws {
+        let app = Application(.development)
+        defer { app.shutdown() }
+
+        app.get("hello") { req in
+            "Hello, World!"
+        }
+
+        try app.run()
+    }
+}
