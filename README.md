@@ -1,4 +1,4 @@
- ** Development Plan for Central Sequence Service**
+# Development Plan for Central Sequence Service
 
 #### **Project Setup and Current State**
 The **Central Sequence Service** project is structured as follows:
