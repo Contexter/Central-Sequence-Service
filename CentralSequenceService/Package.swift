@@ -3,7 +3,7 @@ import PackageDescription
 
 
 let package = Package(
-    name: "GreetingService",
+    name: "CentralSequenceService",
     platforms: [
         .macOS(.v10_15)
     ],
@@ -15,7 +15,7 @@ let package = Package(
     ],
     targets: [
         .executableTarget(
-            name: "GreetingService",
+            name: "CentralSequenceService",
             dependencies: [
                 .product(name: "OpenAPIRuntime", package: "swift-openapi-runtime"),
                 .product(name: "OpenAPIVapor", package: "swift-openapi-vapor"),
