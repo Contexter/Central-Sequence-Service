@@ -1,212 +1,265 @@
-# Development Plan for Central Sequence Service
+# **Central Sequence Service: Comprehensive Architecture and Development Plan**
 
-#### **Project Setup and Current State**
-The **Central Sequence Service** project is structured as follows:
+## **Architectural Overview**
 
-1. **OpenAPI Specification (`openapi.yaml`)**:
-   - Defines the API's structure, endpoints, and schemas.
-   - Location: `CentralSequenceService/Sources/openapi.yaml`.
-
-2. **OpenAPI Generator Configuration (`openapi-generator-config.yaml`)**:
-   - Specifies generation of types, server code, and client code.
-   - Outputs to:
-     ```
-     .build/plugins/outputs/centralsequenceservice/CentralSequenceService/destination/OpenAPIGenerator/GeneratedSources
-     ```
-
-3. **Generated Files**:
-   - **`Types.swift`**: Data models (e.g., request and response schemas).
-   - **`Server.swift`**: Boilerplate route handlers for the API endpoints.
-   - **`Client.swift`**: Optional client SDK for interacting with the API.
-
-4. **Development Flow**:
-   - The OpenAPI Generator is automatically triggered during the build process.
-   - Business logic is implemented in the generated `Server.swift`.
+The Central Sequence Service application is built on the Vapor framework and adheres to a modular, scalable design inspired by clean architecture principles. This document outlines the project's refactored architecture, detailing its file structure, responsibilities, and integration with OpenAPI-generated code. Additionally, a step-by-step development plan is provided for implementing the application.
 
 ---
 
-### **Development Objectives**
-Deliver a functional server application that:
-1. Handles all API requests per the `openapi.yaml` definition.
-2. Persists and retrieves data using SQLite.
-3. Synchronizes data with Typesense.
-4. Complies with the OpenAPI specification.
+## **High-Level Architecture**
+
+### **1. Key Components**
+- **Controllers**: Handle HTTP-specific logic and map routes to services.
+- **Services**: Contain business logic and delegate operations to database or external integrations.
+- **Database Layer**: Manages SQLite-based persistence.
+- **External Integration**: Handles data synchronization with Typesense.
+
+### **2. Integration with Generated Code**
+- **Generated Files**: OpenAPI Generator produces `Server.swift` and `Types.swift`.
+  - `Server.swift` defines routes and uses the `APIProtocol`.
+  - `Types.swift` contains models for request and response payloads.
+- **Custom Implementation**: The `APIProtocol` methods are implemented in `main.swift`, delegating to services.
 
 ---
 
-### **Detailed Development Plan**
+## **Refactored Folder Structure**
 
-#### **1. Implement Business Logic in Generated Code**
-
-##### **a. Examine Generated Files**
-- Locate the generated files:
-  ```
-  .build/plugins/outputs/centralsequenceservice/CentralSequenceService/destination/OpenAPIGenerator/GeneratedSources
-  ```
-- Focus on `Server.swift` for route handlers and `Types.swift` for data models.
-
-##### **b. Implement Endpoints**
-
-1. **`/sequence` (POST)**:
-   - Handler in `Server.swift`:
-     ```swift
-     func generateSequenceNumber(req: Request) throws -> EventLoopFuture<SequenceResponse>
-     ```
-   - **Tasks**:
-     - Parse request (decode `SequenceRequest`).
-     - Generate a sequence number using business logic.
-     - Persist the sequence number in SQLite.
-     - Return a `SequenceResponse`.
-
-2. **`/sequence/reorder` (PUT)**:
-   - Handler in `Server.swift`:
-     ```swift
-     func reorderElements(req: Request) throws -> HTTPStatus
-     ```
-   - **Tasks**:
-     - Parse request (decode `ReorderRequest`).
-     - Update sequence numbers in SQLite.
-     - Synchronize the reordered data with Typesense.
-     - Return success status.
-
-3. **`/sequence/version` (POST)**:
-   - Handler in `Server.swift`:
-     ```swift
-     func createNewVersion(req: Request) throws -> HTTPStatus
-     ```
-   - **Tasks**:
-     - Parse request (decode `VersionRequest`).
-     - Create a new version entry in SQLite.
-     - Synchronize with Typesense.
-     - Return success status.
+```
+CentralSequenceService/
+├── Sources/
+│   ├── CentralSequenceService/
+│   │   ├── main.swift                     # App entry point
+│   │   ├── Controllers/
+│   │   │   ├── SequenceController.swift   # Handle sequence-related endpoints
+│   │   ├── Services/
+│   │   │   ├── SequenceService.swift      # Core sequence logic
+│   │   │   ├── DatabaseService.swift      # SQLite integration
+│   │   │   ├── TypesenseService.swift     # Typesense integration
+│   │   ├── Models/
+│   │   │   ├── DatabaseModels.swift       # Models for database operations
+│   │   ├── Config/
+│   │   │   ├── DatabaseConfig.swift       # SQLite configuration
+│   │   │   ├── TypesenseConfig.swift      # Typesense configuration
+│   │   ├── GeneratedSources/
+│   │   │   ├── Server.swift               # Generated OpenAPI routes
+│   │   │   ├── Types.swift                # Generated OpenAPI models
+```
 
 ---
 
-#### **2. Integrate SQLite for Persistence**
+## **Development Plan**
 
-- **Define Schema**:
-  Use SQLite to store sequence data. Example schema:
-  ```sql
-  CREATE TABLE sequences (
-      id INTEGER PRIMARY KEY AUTOINCREMENT,
-      element_type TEXT NOT NULL,
-      element_id INTEGER NOT NULL,
-      sequence_number INTEGER NOT NULL,
-      comment TEXT NOT NULL
-  );
-  ```
+### **Phase 1: Setup**
 
-- **Implement Models**:
-  Define Swift models to map database entries.
+#### **1. Update Package.swift**
+- Add dependencies for SQLite and Typesense.
 
-  Example:
-  ```swift
-  import Vapor
-  import FluentSQLiteDriver
+```swift
+.package(url: "https://github.com/vapor/sqlite-nio.git", from: "1.0.0"),
+.package(url: "https://github.com/typesense/typesense-swift.git", from: "1.0.0"),
+```
 
-  final class Sequence: Model, Content {
-      static let schema = "sequences"
+- Update targets to include these dependencies.
 
-      @ID(key: .id)
-      var id: UUID?
-
-      @Field(key: "element_type")
-      var elementType: String
-
-      @Field(key: "element_id")
-      var elementId: Int
-
-      @Field(key: "sequence_number")
-      var sequenceNumber: Int
-
-      @Field(key: "comment")
-      var comment: String
-  }
-  ```
-
-- **Use Queries in Handlers**:
-  Example for persisting a sequence:
-  ```swift
-  try await Sequence.query(on: req.db)
-      .create(Sequence(elementType: sequenceRequest.elementType, elementId: sequenceRequest.elementId, sequenceNumber: generatedNumber, comment: "Generated successfully"))
+#### **2. Initialize Dependencies**
+- Run the following commands to install and test dependencies:
+  ```bash
+  swift package update
+  swift build
   ```
 
 ---
 
-#### **3. Synchronize with Typesense**
+### **Phase 2: Define Services**
 
-- If a Swift SDK for Typesense exists, integrate it. Otherwise, use Vapor's HTTP client.
-- **Example Synchronization Logic**:
-  ```swift
-  func synchronizeWithTypesense(sequence: Sequence, req: Request) async throws {
-      let response = try await req.client.post("https://your-typesense-instance.com/sync") { req in
-          try req.content.encode(sequence)
-      }
-      guard response.status == .ok else {
-          throw Abort(.badRequest, reason: "Failed to synchronize with Typesense")
-      }
-  }
-  ```
+#### **1. SequenceService**
+Handles core business logic, combining database and Typesense functionality.
 
-- Call this function from endpoint handlers after database operations.
+- **File:** `Services/SequenceService.swift`
+```swift
+protocol SequenceServiceProtocol {
+    func generateSequenceNumber(for request: Components.Schemas.SequenceRequest) async throws -> Components.Schemas.SequenceResponse
+}
 
----
+final class SequenceService: SequenceServiceProtocol {
+    let databaseService: DatabaseServiceProtocol
+    let typesenseService: TypesenseServiceProtocol
 
-#### **4. Validate OpenAPI Compliance**
+    init(databaseService: DatabaseServiceProtocol, typesenseService: TypesenseServiceProtocol) {
+        self.databaseService = databaseService
+        self.typesenseService = typesenseService
+    }
 
-- Use Swagger UI or Postman to validate endpoints against the `openapi.yaml` definition.
-- Ensure all request/response payloads match their schemas.
-
----
-
-#### **5. Automate Testing**
-
-- Write unit and integration tests for endpoints.
-- Example test for `/sequence`:
-  ```swift
-  func testGenerateSequenceNumber() throws {
-      let app = Application(.testing)
-      defer { app.shutdown() }
-
-      try app.test(.POST, "/sequence", beforeRequest: { req in
-          try req.content.encode(SequenceRequest(elementType: "script", elementId: 1, comment: "Test"))
-      }, afterResponse: { res in
-          XCTAssertEqual(res.status, .created)
-          let response = try res.content.decode(SequenceResponse.self)
-          XCTAssertNotNil(response.sequenceNumber)
-      })
-  }
-  ```
+    func generateSequenceNumber(for request: Components.Schemas.SequenceRequest) async throws -> Components.Schemas.SequenceResponse {
+        let sequenceNumber = Int.random(in: 1...1000)
+        try await databaseService.saveSequenceNumber(
+            elementType: request.elementType.rawValue,
+            elementId: request.elementId,
+            sequenceNumber: sequenceNumber,
+            comment: request.comment
+        )
+        try await typesenseService.synchronizeSequence(request.elementId, sequenceNumber: sequenceNumber)
+        return Components.Schemas.SequenceResponse(sequenceNumber: sequenceNumber, comment: "Generated successfully")
+    }
+}
+```
 
 ---
 
-### **Timeline**
+#### **2. DatabaseService**
+Handles SQLite-based persistence.
 
-#### **Day 1: Setup and Planning**
-- Validate project builds correctly.
-- Inspect and understand `openapi.yaml`, `Server.swift`, and `Types.swift`.
+- **File:** `Services/DatabaseService.swift`
+```swift
+protocol DatabaseServiceProtocol {
+    func saveSequenceNumber(elementType: String, elementId: Int, sequenceNumber: Int, comment: String) async throws
+}
 
-#### **Day 2: Core Endpoint Implementation**
-- Implement `/sequence` (POST):
-  - Generate sequence numbers.
-  - Persist data to SQLite.
-  - Synchronize with Typesense.
+final class DatabaseService: DatabaseServiceProtocol {
+    private let db: SQLiteConnection
 
-#### **Day 3: Advanced Features**
-- Implement `/sequence/reorder` (PUT) and `/sequence/version` (POST).
-- Write database queries and synchronization logic for these endpoints.
+    init(database: SQLiteConnection) {
+        self.db = database
+    }
 
-#### **Day 4: Testing and Validation**
-- Write unit tests for all endpoints.
-- Validate API compliance with OpenAPI spec using Swagger or Postman.
-
-#### **Day 5: Finalization**
-- Optimize code and refactor if needed.
-- Prepare documentation for the implemented API.
+    func saveSequenceNumber(elementType: String, elementId: Int, sequenceNumber: Int, comment: String) async throws {
+        let query = """
+        INSERT INTO sequences (element_type, element_id, sequence_number, comment)
+        VALUES (?, ?, ?, ?)
+        """
+        try await db.query(query, [elementType, elementId, sequenceNumber, comment])
+    }
+}
+```
 
 ---
 
-### **Deliverables**
-1. Fully functional server with SQLite persistence and Typesense synchronization.
-2. Automated tests for all endpoints.
-3. Documentation and validation reports for OpenAPI compliance.
+#### **3. TypesenseService**
+Handles data synchronization with Typesense.
+
+- **File:** `Services/TypesenseService.swift`
+```swift
+protocol TypesenseServiceProtocol {
+    func synchronizeSequence(_ elementId: Int, sequenceNumber: Int) async throws
+}
+
+final class TypesenseService: TypesenseServiceProtocol {
+    private let client: Client
+
+    init(client: Client) {
+        self.client = client
+    }
+
+    func synchronizeSequence(_ elementId: Int, sequenceNumber: Int) async throws {
+        let document = ["id": "\(elementId)", "sequenceNumber": sequenceNumber]
+        try await client.collections["sequences"].documents.create(document: document)
+    }
+}
+```
+
+---
+
+### **Phase 3: Implement Controllers**
+
+#### **1. SequenceController**
+Handles HTTP routes for sequences.
+
+- **File:** `Controllers/SequenceController.swift`
+```swift
+import Vapor
+
+struct SequenceController: RouteCollection {
+    let sequenceService: SequenceServiceProtocol
+
+    func boot(routes: RoutesBuilder) throws {
+        let sequenceRoutes = routes.grouped("sequence")
+        sequenceRoutes.post(use: generateSequenceNumber)
+    }
+
+    func generateSequenceNumber(req: Request) async throws -> SequenceResponse {
+        let requestBody = try req.content.decode(SequenceRequest.self)
+        return try await sequenceService.generateSequenceNumber(for: requestBody)
+    }
+}
+```
+
+---
+
+### **Phase 4: Connect the Pieces in `main.swift`**
+
+- **File:** `main.swift`
+
+```swift
+import Vapor
+import SQLiteNIO
+import Typesense
+
+let app = Application()
+
+// Configure SQLite
+let sqliteSource = SQLiteConnectionSource(
+    configuration: .init(storage: .file(path: "database.sqlite"))
+)
+let database = try sqliteSource.makeConnection(logger: app.logger).wait()
+
+// Configure Typesense
+let typesenseClient = Client(
+    configuration: Configuration(
+        nodes: [Node(host: "localhost", port: 8108, protocol: "http")],
+        apiKey: "your_api_key"
+    )
+)
+
+// Initialize services
+let databaseService = DatabaseService(database: database)
+let typesenseService = TypesenseService(client: typesenseClient)
+let sequenceService = SequenceService(
+    databaseService: databaseService,
+    typesenseService: typesenseService
+)
+
+// Implement APIProtocol
+let apiImplementation = APIImplementation(sequenceService: sequenceService)
+
+// Register routes
+try apiImplementation.registerHandlers(on: app)
+
+// Run the app
+try app.run()
+```
+
+---
+
+### **Phase 5: Testing**
+
+#### **1. Build the App**
+```bash
+swift build
+```
+
+#### **2. Run the App**
+```bash
+swift run
+```
+
+#### **3. Test API Endpoints**
+- Use tools like Postman or `curl` to test endpoints.
+
+Example:
+```bash
+curl -X POST http://localhost:8080/sequence \
+-H "Content-Type: application/json" \
+-d '{
+    "elementType": "script",
+    "elementId": 123,
+    "comment": "Test generation"
+}'
+```
+
+---
+
+### **Conclusion**
+
+This architecture integrates OpenAPI-generated code with a modular, maintainable structure. Each component has clear responsibilities, making the app scalable and testable.
+
+Let me know if you need further assistance!
