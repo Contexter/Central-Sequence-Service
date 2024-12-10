@@ -1,2 +1,5 @@
 # Central Sequence Service
-This repository is a fresh start for implementing the Central Sequence Service based on Vapor and OpenAPIKit.
+
+
+Follow along:
+https://swiftpackageindex.com/apple/swift-openapi-generator/1.5.0/tutorials/swift-openapi-generator/serverswiftpm
