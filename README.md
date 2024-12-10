@@ -1,85 +1,61 @@
-# Central Sequence Service
-
-
-Follow along:
-https://swiftpackageindex.com/apple/swift-openapi-generator/1.5.0/tutorials/swift-openapi-generator/serverswiftpm
-
-
-### **Development Plan for Central Sequence Service**
+### ** Development Plan for Central Sequence Service**
 
 #### **Project Setup and Current State**
-The **Central Sequence Service** project is set up as follows:
+The **Central Sequence Service** project is structured as follows:
 
 1. **OpenAPI Specification (`openapi.yaml`)**:
-   - Defines the API's structure, endpoints, request/response models, and metadata.
-   - Located at: `CentralSequenceService/Sources/openapi.yaml`.
+   - Defines the API's structure, endpoints, and schemas.
+   - Location: `CentralSequenceService/Sources/openapi.yaml`.
 
 2. **OpenAPI Generator Configuration (`openapi-generator-config.yaml`)**:
    - Specifies generation of types, server code, and client code.
-   - Outputs are automatically placed in:
+   - Outputs to:
      ```
      .build/plugins/outputs/centralsequenceservice/CentralSequenceService/destination/OpenAPIGenerator/GeneratedSources
      ```
 
 3. **Generated Files**:
-   - **`Types.swift`**: Contains data models (e.g., request and response schemas).
-   - **`Server.swift`**: Implements routes and placeholder handlers for API endpoints.
-   - **`Client.swift`**: Provides an SDK for consuming the API.
+   - **`Types.swift`**: Data models (e.g., request and response schemas).
+   - **`Server.swift`**: Boilerplate route handlers for the API endpoints.
+   - **`Client.swift`**: Optional client SDK for interacting with the API.
 
-4. **Execution Flow**:
-   - The OpenAPI Generator is invoked during the build process (`swift build`), ensuring that generated files remain up-to-date with the `openapi.yaml` specification.
-   - Developers are expected to implement business logic within the generated `Server.swift`.
-
-5. **Existing Framework**:
-   - The project uses Vapor, a powerful server-side Swift framework.
-   - SQLite is likely integrated for persistence, given the context of the application.
+4. **Development Flow**:
+   - The OpenAPI Generator is automatically triggered during the build process.
+   - Business logic is implemented in the generated `Server.swift`.
 
 ---
 
 ### **Development Objectives**
-The primary goal is to implement a fully functional server application that:
-1. Processes API requests as defined in `openapi.yaml`.
+Deliver a functional server application that:
+1. Handles all API requests per the `openapi.yaml` definition.
 2. Persists and retrieves data using SQLite.
-3. Synchronizes changes with Typesense.
+3. Synchronizes data with Typesense.
 4. Complies with the OpenAPI specification.
 
 ---
 
 ### **Detailed Development Plan**
 
-#### **1. Confirm Environment Setup**
-- Ensure the following are installed and functional:
-  - Swift
-  - Vapor toolbox (`brew install vapor`)
-  - OpenAPI Generator (`brew install openapi-generator`)
-- Validate the project builds without errors:
-  ```bash
-  swift build
-  ```
+#### **1. Implement Business Logic in Generated Code**
 
----
-
-#### **2. Implement Business Logic in Generated Code**
-
-##### **a. Explore Generated Files**
-- Locate the generated files in:
+##### **a. Examine Generated Files**
+- Locate the generated files:
   ```
   .build/plugins/outputs/centralsequenceservice/CentralSequenceService/destination/OpenAPIGenerator/GeneratedSources
   ```
-- Inspect `Server.swift` for placeholder route handlers.
-- Identify required business logic for each endpoint based on `openapi.yaml`.
+- Focus on `Server.swift` for route handlers and `Types.swift` for data models.
 
-##### **b. Implement Specific Endpoints**
+##### **b. Implement Endpoints**
 
 1. **`/sequence` (POST)**:
    - Handler in `Server.swift`:
      ```swift
      func generateSequenceNumber(req: Request) throws -> EventLoopFuture<SequenceResponse>
      ```
-   - Tasks:
-     - Parse the request (decode `SequenceRequest`).
-     - Generate a sequence number (implement logic).
-     - Persist data to SQLite.
+   - **Tasks**:
+     - Parse request (decode `SequenceRequest`).
+     - Generate a sequence number using business logic.
+     - Persist the sequence number in SQLite.
      - Return a `SequenceResponse`.
 
 2. **`/sequence/reorder` (PUT)**:
@@ -87,29 +63,29 @@ The primary goal is to implement a fully functional server application that:
      ```swift
      func reorderElements(req: Request) throws -> HTTPStatus
      ```
-   - Tasks:
-     - Parse the request (decode `ReorderRequest`).
+   - **Tasks**:
+     - Parse request (decode `ReorderRequest`).
      - Update sequence numbers in SQLite.
-     - Synchronize changes with Typesense.
-     - Return appropriate status.
+     - Synchronize the reordered data with Typesense.
+     - Return success status.
 
 3. **`/sequence/version` (POST)**:
    - Handler in `Server.swift`:
      ```swift
      func createNewVersion(req: Request) throws -> HTTPStatus
      ```
-   - Tasks:
-     - Parse the request (decode `VersionRequest`).
+   - **Tasks**:
+     - Parse request (decode `VersionRequest`).
      - Create a new version entry in SQLite.
      - Synchronize with Typesense.
-     - Return appropriate status.
+     - Return success status.
 
 ---
 
-#### **3. Integrate SQLite for Persistence**
-- Add database setup code in `main.swift` or a dedicated initialization file.
-- Define models for tables (`sequences`, `reorder_logs`, etc.).
-- Example table for sequences:
+#### **2. Integrate SQLite for Persistence**
+
+- **Define Schema**:
+  Use SQLite to store sequence data. Example schema:
   ```sql
   CREATE TABLE sequences (
       id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -119,14 +95,48 @@ The primary goal is to implement a fully functional server application that:
       comment TEXT NOT NULL
   );
   ```
-- Use SQLite queries for data operations.
+
+- **Implement Models**:
+  Define Swift models to map database entries.
+
+  Example:
+  ```swift
+  import Vapor
+  import FluentSQLiteDriver
+
+  final class Sequence: Model, Content {
+      static let schema = "sequences"
+
+      @ID(key: .id)
+      var id: UUID?
+
+      @Field(key: "element_type")
+      var elementType: String
+
+      @Field(key: "element_id")
+      var elementId: Int
+
+      @Field(key: "sequence_number")
+      var sequenceNumber: Int
+
+      @Field(key: "comment")
+      var comment: String
+  }
+  ```
+
+- **Use Queries in Handlers**:
+  Example for persisting a sequence:
+  ```swift
+  try await Sequence.query(on: req.db)
+      .create(Sequence(elementType: sequenceRequest.elementType, elementId: sequenceRequest.elementId, sequenceNumber: generatedNumber, comment: "Generated successfully"))
+  ```
 
 ---
 
-#### **4. Synchronize with Typesense**
-- If a Typesense SDK for Swift is available, integrate it into the project.
-- Otherwise, use Vapor's `Client` to make HTTP requests to the Typesense API.
-- Example synchronization logic:
+#### **3. Synchronize with Typesense**
+
+- If a Swift SDK for Typesense exists, integrate it. Otherwise, use Vapor's HTTP client.
+- **Example Synchronization Logic**:
   ```swift
   func synchronizeWithTypesense(sequence: Sequence, req: Request) async throws {
       let response = try await req.client.post("https://your-typesense-instance.com/sync") { req in
@@ -138,18 +148,21 @@ The primary goal is to implement a fully functional server application that:
   }
   ```
 
----
-
-#### **5. Validate OpenAPI Compliance**
-- Use Swagger UI or Postman to test endpoints and validate responses.
-- Ensure all responses match the schemas defined in `openapi.yaml`.
+- Call this function from endpoint handlers after database operations.
 
 ---
 
-#### **6. Automate Testing**
-- Write unit tests for handlers in `Server.swift`.
-- Use Vapor's XCTest integration for API testing.
-- Example test:
+#### **4. Validate OpenAPI Compliance**
+
+- Use Swagger UI or Postman to validate endpoints against the `openapi.yaml` definition.
+- Ensure all request/response payloads match their schemas.
+
+---
+
+#### **5. Automate Testing**
+
+- Write unit and integration tests for endpoints.
+- Example test for `/sequence`:
   ```swift
   func testGenerateSequenceNumber() throws {
       let app = Application(.testing)
@@ -167,34 +180,33 @@ The primary goal is to implement a fully functional server application that:
 
 ---
 
-### **Milestones**
+### **Timeline**
 
-1. **Day 1**: Initial setup
-   - Validate the build process.
-   - Inspect and understand the generated code.
-   - Write initial database schema and models.
+#### **Day 1: Setup and Planning**
+- Validate project builds correctly.
+- Inspect and understand `openapi.yaml`, `Server.swift`, and `Types.swift`.
 
-2. **Day 2**: Implement core business logic
-   - Complete `/sequence` (POST).
-   - Add SQLite persistence for sequence data.
-   - Synchronize sequence generation with Typesense.
+#### **Day 2: Core Endpoint Implementation**
+- Implement `/sequence` (POST):
+  - Generate sequence numbers.
+  - Persist data to SQLite.
+  - Synchronize with Typesense.
 
-3. **Day 3**: Implement advanced features
-   - Complete `/sequence/reorder` (PUT).
-   - Add logic for reordering elements in SQLite.
-   - Synchronize reordered elements with Typesense.
+#### **Day 3: Advanced Features**
+- Implement `/sequence/reorder` (PUT) and `/sequence/version` (POST).
+- Write database queries and synchronization logic for these endpoints.
 
-4. **Day 4**: Finalize and test
-   - Complete `/sequence/version` (POST).
-   - Write unit and integration tests.
-   - Validate OpenAPI compliance.
+#### **Day 4: Testing and Validation**
+- Write unit tests for all endpoints.
+- Validate API compliance with OpenAPI spec using Swagger or Postman.
+
+#### **Day 5: Finalization**
+- Optimize code and refactor if needed.
+- Prepare documentation for the implemented API.
 
 ---
 
 ### **Deliverables**
-1. Fully functional server application.
-2. Persisted data in SQLite.
-3. Synchronized data with Typesense.
-4. Comprehensive tests for all endpoints.
-
-This plan ensures a systematic approach while leveraging the existing OpenAPI Generator setup without unnecessary configuration changes. Let me know if you'd like adjustments or additional details!
+1. Fully functional server with SQLite persistence and Typesense synchronization.
+2. Automated tests for all endpoints.
+3. Documentation and validation reports for OpenAPI compliance.
