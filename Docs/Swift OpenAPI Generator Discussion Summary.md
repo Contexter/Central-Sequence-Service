@@ -1,5 +1,7 @@
 # Swift OpenAPI Generator Discussion Summary
 
+> https://swiftpackageindex.com/apple/swift-openapi-generator/1.5.1/documentation/swift-openapi-generator/configuring-the-generator
+
 ## **Summary**
 
 In this discussion, we explored the nuances of using Apple's **Swift OpenAPI Generator** within a Swift package for a Vapor-based project. The focus was on:
