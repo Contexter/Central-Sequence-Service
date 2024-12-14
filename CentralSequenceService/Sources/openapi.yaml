@@ -1,17 +1,17 @@
 openapi: 3.1.0
 info:
   title: Central Sequence Service API
-  description: >
+  description:
     Manages sequence numbers for story elements, ensuring order and consistency via SQLite persistence and Typesense synchronization.
     Detailed implementation instructions can be found in the repository documentation.
-  version: 4.0.0
+  version: 5.0.0
   contact:
     name: Repository Documentation
     url: https://github.com/Contexter/Central-Sequence-Service
 servers:
-  - url: https://centralsequence.fountain.coach
+  - url: "https://centralsequence.fountain.coach"
     description: Production server
-  - url: https://staging.centralsequence.fountain.coach
+  - url: "https://staging.centralsequence.fountain.coach"
     description: Staging server
 paths:
   /sequence:
