@@ -2,11 +2,15 @@ openapi: 3.1.0
 info:
   title: Central Sequence Service API
   description: >
-    This API manages the assignment and updating of sequence numbers for various elements within a story, ensuring logical order and consistency. The service persists data to an SQLite database, which is then synchronized with Typesense for real-time search and retrieval capabilities.
+    Manages sequence numbers for story elements, ensuring order and consistency via SQLite persistence and Typesense synchronization.
+    Detailed implementation instructions can be found in the repository documentation.
   version: 4.0.0
+  contact:
+    name: Repository Documentation
+    url: https://github.com/Contexter/Central-Sequence-Service
 servers:
   - url: https://centralsequence.fountain.coach
-    description: Production server for Central Sequence Service API
+    description: Production server
   - url: https://staging.centralsequence.fountain.coach
     description: Staging server
 paths:
@@ -15,47 +19,37 @@ paths:
       summary: Generate Sequence Number
       operationId: generateSequenceNumber
       tags:
-        - Sequence Management
-      description: Generates a new sequence number for a specified element type, persists it to an SQLite database, and synchronizes it with Typesense. If synchronization with Typesense fails, a retry mechanism will be triggered automatically.
+        - SequenceManagement
+      description: |
+        Creates a sequence number for an element and synchronizes it with Typesense.
       requestBody:
         required: true
-        description: Details of the element requesting a sequence number.
+        description: Element details to generate the sequence number.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/SequenceRequest'
       responses:
         '201':
-          description: Sequence number successfully generated and synchronized.
+          description: Sequence generated and synchronized.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/SequenceResponse'
         '400':
-          description: Invalid request parameters.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request (e.g., missing or incorrect fields).
         '502':
-          description: Failed to synchronize with Typesense.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TypesenseErrorResponse'
+          description: Synchronization with Typesense failed.
         '500':
           description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /sequence/reorder:
     put:
       summary: Reorder Elements
       operationId: reorderElements
       tags:
-        - Sequence Management
-      description: Reorders elements by updating their sequence numbers, persists the changes to an SQLite database, and synchronizes the changes with Typesense. If synchronization with Typesense fails, a retry mechanism will be triggered automatically.
+        - SequenceManagement
+      description: |
+        Reorders sequence numbers for elements and syncs them with Typesense.
       requestBody:
         required: true
         description: Details of the reordering request.
@@ -65,105 +59,78 @@ paths:
               $ref: '#/components/schemas/ReorderRequest'
       responses:
         '200':
-          description: Elements successfully reordered and synchronized.
+          description: Elements reordered and synchronized.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ReorderResponse'
         '400':
-          description: Invalid request parameters.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request (e.g., missing or incorrect fields).
         '502':
-          description: Failed to synchronize with Typesense.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TypesenseErrorResponse'
+          description: Synchronization with Typesense failed.
         '500':
           description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
   /sequence/version:
     post:
       summary: Create New Version
       operationId: createVersion
       tags:
-        - Version Management
-      description: Creates a new version of an element, persists it to an SQLite database, and synchronizes it with Typesense. If synchronization with Typesense fails, a retry mechanism will be triggered automatically.
+        - VersionManagement
+      description: |
+        Creates a new version of an element and syncs it with Typesense.
       requestBody:
         required: true
-        description: Details of the versioning request.
+        description: Details for creating a new version.
         content:
           application/json:
             schema:
               $ref: '#/components/schemas/VersionRequest'
       responses:
         '201':
-          description: New version successfully created and synchronized.
+          description: New version created and synchronized.
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/VersionResponse'
         '400':
-          description: Invalid request parameters.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
+          description: Invalid request (e.g., missing or incorrect fields).
         '502':
-          description: Failed to synchronize with Typesense.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/TypesenseErrorResponse'
+          description: Synchronization with Typesense failed.
         '500':
           description: Internal server error.
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ErrorResponse'
 components:
   schemas:
     SequenceRequest:
-      description: Schema representing a request to generate a new sequence number
+      description: Request schema to generate a sequence number.
       type: object
       properties:
         elementType:
           type: string
-          description: Type of the element (e.g., script, section, character, action, spokenWord).
-          enum: [script, section, character, action, spokenWord]
+          description: Type of the element (e.g., script, section).
         elementId:
           type: integer
-          description: Unique identifier of the element.
-          minimum: 1
+          description: Unique ID of the element.
         comment:
           type: string
-          description: Contextual explanation for generating the sequence number.
+          description: Explanation for generating the sequence number.
       required: [elementType, elementId, comment]
     SequenceResponse:
-      description: Schema representing the response with a generated sequence number
+      description: Response schema for generated sequence number.
       type: object
       properties:
         sequenceNumber:
           type: integer
-          description: The generated sequence number.
-          minimum: 1
+          description: Generated sequence number.
         comment:
           type: string
-          description: Contextual explanation generated dynamically by the GPT model, explaining why the sequence number was generated.
+          description: Explanation for the generated sequence number.
     ReorderRequest:
-      description: Schema representing a request to reorder elements
+      description: Request schema for reordering elements.
       type: object
       properties:
         elementType:
           type: string
           description: Type of elements being reordered.
-          enum: [script, section, character, action, spokenWord]
         elements:
           type: array
           items:
@@ -171,18 +138,16 @@ components:
             properties:
               elementId:
                 type: integer
-                description: Unique identifier of the element.
-                minimum: 1
+                description: Unique ID of the element.
               newSequence:
                 type: integer
-                description: New sequence number for the element.
-                minimum: 1
+                description: New sequence number.
         comment:
           type: string
-          description: Contextual explanation for reordering the elements.
+          description: Explanation for reordering elements.
       required: [elementType, elements, comment]
     ReorderResponse:
-      description: Schema representing the response after reordering elements
+      description: Response schema for reordered elements.
       type: object
       properties:
         updatedElements:
@@ -192,76 +157,69 @@ components:
             properties:
               elementId:
                 type: integer
-                description: Unique identifier of the element.
+                description: Unique ID of the element.
               newSequence:
                 type: integer
                 description: Updated sequence number.
         comment:
           type: string
-          description: Contextual explanation generated dynamically by the GPT model, explaining why the elements were reordered.
+          description: Explanation for reordering elements.
     VersionRequest:
-      description: Schema representing a request to create a new version of an element
+      description: Request schema for creating a new version.
       type: object
       properties:
         elementType:
           type: string
-          description: Type of the element (e.g., script, section, character, action, spokenWord).
-          enum: [script, section, character, action, spokenWord]
+          description: Type of the element (e.g., script, section).
         elementId:
           type: integer
-          description: Unique identifier of the element.
-          minimum: 1
+          description: Unique ID of the element.
         newVersionData:
           type: object
-          description: Data for the new version of the element.
+          description: Data for the new version.
         comment:
           type: string
-          description: Contextual explanation for creating the new version.
+          description: Explanation for creating a new version.
       required: [elementType, elementId, newVersionData, comment]
     VersionResponse:
-      description: Schema representing the response with the new version number
+      description: Response schema for new version creation.
       type: object
       properties:
         versionNumber:
           type: integer
-          description: The version number of the new version.
-          minimum: 1
+          description: New version number.
         comment:
           type: string
-          description: Contextual explanation generated dynamically by the GPT model, explaining why the new version was created.
-    SuccessResponse:
-      type: object
-      properties:
-        message:
-          type: string
-          description: Success message.
+          description: Explanation for creating the new version.
     ErrorResponse:
+      description: Generic error response schema.
       type: object
       properties:
         errorCode:
           type: string
-          description: Application-specific error code.
+          description: Error code.
         message:
           type: string
-          description: Human-readable error message.
+          description: Description of the error.
         details:
           type: string
-          description: Additional information about the error, if available.
+          description: Additional error details.
     TypesenseErrorResponse:
+      description: Error response for Typesense synchronization.
       type: object
       properties:
         errorCode:
           type: string
-          description: Error code related to Typesense synchronization.
+          description: Error code from Typesense.
         retryAttempt:
           type: integer
-          description: Number of retry attempts made to synchronize with Typesense.
+          description: Number of retry attempts.
         message:
           type: string
-          description: Human-readable error message.
+          description: Error message from Typesense.
         details:
           type: string
-          description: Additional information about the Typesense error, if available.
+          description: Additional Typesense error details.
   securitySchemes:
     apiKeyAuth:
       type: apiKey
