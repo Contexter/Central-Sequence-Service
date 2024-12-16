@@ -1,7 +1,9 @@
 import Vapor
 
-public func iteration_2(app: Application) {
-    app.get("status") { req -> String in
-        return "Iteration 2: Server is running!"
+/// Logic for Iteration 2
+func iteration_2(app: Application) {
+    app.get("health") { req -> String in
+        return "Iteration 2: Server is healthy!"
     }
+    print("Iteration 2 logic executed.")
 }
