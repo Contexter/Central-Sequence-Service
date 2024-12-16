@@ -33,7 +33,14 @@ let package = Package(
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
                 .product(name: "Typesense", package: "typesense-swift"),
             ],
-            path: "Sources" // Updated to match the current tree structure
+            path: "Sources",
+            exclude: [
+                "../.build/checkouts/swift-algorithms/Sources/Algorithms/Documentation.docc"
+            ],
+            resources: [
+                .process("openapi.yaml"),
+                .process("openapi-generator-config.yaml")
+            ]
         )
     ]
 )
