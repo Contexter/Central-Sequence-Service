@@ -1,9 +1,7 @@
 import Vapor
 
-/// Defines the configuration for Iteration 2.
-func configureIteration2(_ app: Application) {
+public func iteration_2(app: Application) {
     app.get("status") { req -> String in
-        return "Iteration 2: Server is running smoothly!"
+        return "Iteration 2: Server is running!"
     }
 }
-

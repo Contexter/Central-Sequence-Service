@@ -1,7 +1,6 @@
 import Vapor
 
-/// Defines the configuration for Iteration 1.
-func configureIteration1(_ app: Application) {
+public func iteration_1(app: Application) {
     app.get("health") { req -> String in
         return "Iteration 1: Server is healthy!"
     }

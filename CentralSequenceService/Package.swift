@@ -31,11 +31,9 @@ let package = Package(
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentSQLiteDriver", package: "fluent-sqlite-driver"),
-                .product(name: "Typesense", package: "typesense-swift"), // Correct product name
+                .product(name: "Typesense", package: "typesense-swift"),
             ],
-            plugins: [
-                .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator"),
-            ]
+            path: "Sources" // Updated to match the current tree structure
         )
     ]
 )

@@ -1,11 +1,12 @@
 import Vapor
+import IterationLifecycle
 
 do {
     // Parse command-line arguments
     let iterationArgument = CommandLine.arguments.dropFirst().first ?? ""
-    
+
     // Initialize Vapor application
-    let app = Application(.detect())
+    let app = try Application(.detect())
     defer { app.shutdown() }
 
     // Register the Iteration Lifecycle Handler
