@@ -1,8 +1,8 @@
 import Vapor
 
-func iteration_1(app: Application) {
+/// Defines the configuration for Iteration 1.
+func configureIteration1(_ app: Application) {
     app.get("health") { req -> String in
-        return "Server is healthy!"
+        return "Iteration 1: Server is healthy!"
     }
-    print("Iteration 1: Health check route is active.")
 }
