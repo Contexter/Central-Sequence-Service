@@ -1,30 +1,20 @@
-import Foundation
 import Vapor
 
 do {
-    let app = try Application(.detect()) // Use `try` to handle the throwing initializer
-    defer { app.shutdown() } // Ensure app shuts down properly
+    var env = Environment.custom(
+        arguments: CommandLine.arguments,
+        environment: .detect()
+    )
+    try LoggingSystem.bootstrap(from: &env)
 
-    let arguments = CommandLine.arguments
+    let app = Application(env)
+    defer { app.shutdown() }
 
-    if let iterationIndex = arguments.firstIndex(of: "--run-iteration"),
-       iterationIndex + 1 < arguments.count {
-        let iterationNumber = arguments[iterationIndex + 1]
-        switch iterationNumber {
-        case "1":
-            print("Running iteration 1...")
-            iteration_1(app: app)
-        default:
-            print("Error: Unknown iteration \(iterationNumber)")
-        }
-    } else {
-        print("Starting Central Sequence Service...")
-        app.get { req in
-            "Central Sequence Service is running!"
-        }
-        try app.run() // Start Vapor's HTTP server
-    }
+    // Register the custom command
+    app.commands.use(RunIterationCommand(), as: "run-iteration")
+
+    try app.run()
 } catch {
     print("Failed to start application: \(error.localizedDescription)")
-    exit(1) // Exit with error
+    exit(1)
 }
