@@ -13,7 +13,7 @@ do {
         switch iterationNumber {
         case "1":
             print("Running iteration 1...")
-            iteration1Setup(app: app)
+            iteration_1(app: app)
         default:
             print("Error: Unknown iteration \(iterationNumber)")
         }
