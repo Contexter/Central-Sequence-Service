@@ -1,181 +1,159 @@
-# **Documentation: Iteration-Based Application Execution Using Vapor Lifecycle**
+# **Documentation: Lifecycle-Based Iteration Execution in Vapor**
 
 ## **Introduction**
-This documentation outlines a structured approach to implement iteration-based application execution in a Vapor-based server using the framework’s lifecycle management features. The solution leverages Vapor’s `LifecycleHandler` to configure and run distinct application behaviors ("iterations") based on runtime arguments. Each iteration represents a specific feature set, aligning with OpenAPI-driven development principles.
+This document describes the approach for implementing iteration-based application logic in Vapor using the `LifecycleHandler` mechanism. This method replaces the earlier command-based strategy and ensures seamless integration with Vapor's lifecycle while maintaining clarity and scalability.
 
-This method avoids conflicts with Vapor’s default commands, preserves the core lifecycle, and provides a modular, extensible architecture for managing iterations.
+## **Motivation**
+The previous command-based approach encountered challenges:
+- Conflicts with Vapor’s internal command handling.
+- Complexity in managing custom commands and their integration with Vapor’s lifecycle.
 
----
-
-## **Project Structure**
-The relevant files and their locations in the project tree are as follows:
-
-```
-CentralSequenceService/
-├── Sources/
-│   ├── App/
-│   │   ├── Lifecycle/
-│   │   │   ├── IterationLifecycle.swift
-│   │   ├── main.swift
-│   │   ├── Iterations/
-│   │   │   ├── Iteration1.swift
-│   │   │   ├── Iteration2.swift
-```
+The lifecycle-based approach leverages Vapor’s `LifecycleHandler` to:
+1. Cleanly manage iteration-specific logic.
+2. Align with Vapor’s lifecycle architecture.
+3. Simplify the process of adding new iterations.
 
 ---
 
-## **Implementation Details**
+## **Key Components**
 
-### **1. Lifecycle Handler**
-**File Path**: `Sources/App/Lifecycle/IterationLifecycle.swift`
+### **1. IterationLifecycleHandler**
+The `IterationLifecycleHandler` is a custom implementation of Vapor’s `LifecycleHandler` that orchestrates the execution of iteration-specific logic during the application's lifecycle.
 
-The `IterationLifecycle` struct implements Vapor’s `LifecycleHandler` protocol to configure the application based on the selected iteration:
+- **Responsibilities:**
+  - Determine the iteration to execute based on input (e.g., command-line arguments).
+  - Invoke the corresponding iteration logic.
 
-```swift
-import Vapor
-
-/// A Lifecycle handler that configures the application based on the iteration.
-struct IterationLifecycle: LifecycleHandler {
-    let iteration: String
-
-    func didBoot(_ application: Application) throws {
-        switch iteration {
-        case "1":
-            application.logger.info("Running Iteration 1")
-            configureIteration1(application)
-        case "2":
-            application.logger.info("Running Iteration 2")
-            configureIteration2(application)
-        default:
-            application.logger.warning("Unknown iteration: \(iteration)")
-        }
-    }
-
-    private func configureIteration1(_ app: Application) {
-        app.get("health") { req -> String in
-            return "Iteration 1: Server is healthy!"
-        }
-    }
-
-    private func configureIteration2(_ app: Application) {
-        app.get("status") { req -> String in
-            return "Iteration 2: Server is running smoothly!"
-        }
-    }
-}
-```
-
-### **2. Iteration 1 Configuration**
-**File Path**: `Sources/App/Iterations/Iteration1.swift`
-
-```swift
-import Vapor
-
-/// Defines the configuration for Iteration 1.
-func configureIteration1(_ app: Application) {
-    app.get("health") { req -> String in
-        return "Iteration 1: Server is healthy!"
-    }
-}
-```
-
-### **3. Iteration 2 Configuration**
-**File Path**: `Sources/App/Iterations/Iteration2.swift`
-
-```swift
-import Vapor
-
-/// Defines the configuration for Iteration 2.
-func configureIteration2(_ app: Application) {
-    app.get("status") { req -> String in
-        return "Iteration 2: Server is running smoothly!"
-    }
-}
-```
-
-### **4. Main Entry Point**
-**File Path**: `Sources/App/main.swift`
-
-```swift
-import Vapor
-
-@main
-struct App {
-    static func main() throws {
-        var env = try Environment.detect()
-        try LoggingSystem.bootstrap(from: &env)
-        let app = Application(env)
-        defer { app.shutdown() }
-
-        // Detect the iteration from environment arguments
-        let iteration = env.arguments.first(where: { $0.hasPrefix("iteration=") })?.split(separator: "=").last ?? "default"
-
-        // Attach the IterationLifecycle handler
-        app.lifecycle.use(IterationLifecycle(iteration: String(iteration)))
-
-        // Run the app
-        try app.run()
-    }
-}
-```
-
----
-
-## **How to Run**
-
-### Example 1: Running Iteration 1
-```bash
-swift run CentralSequenceService iteration=1
-```
-
-- The server will load and register the `health` route for **Iteration 1**.
-- Open a browser or run:
-  ```bash
-  curl http://localhost:8080/health
+- **Location:**
+  ```
+  Sources/IterationLifecycle/IterationLifecycleHandler.swift
   ```
 
-### Example 2: Running Iteration 2
-```bash
-swift run CentralSequenceService iteration=2
-```
-
-- The server will load and register the `status` route for **Iteration 2**.
-- Open a browser or run:
-  ```bash
-  curl http://localhost:8080/status
-  ```
-
----
-
-## **Extending to New Iterations**
-To add a new iteration:
-1. Create a new file in the `Sources/App/Iterations/` directory.
-2. Define the iteration logic (e.g., `configureIteration3`).
-3. Update the `IterationLifecycle`'s `didBoot` method to include the new iteration.
-
-For example, for **Iteration 3**:
-- Add a new file: `Sources/App/Iterations/Iteration3.swift`
-- Update `IterationLifecycle.swift`:
+- **Implementation:**
   ```swift
-  case "3":
-      application.logger.info("Running Iteration 3")
-      configureIteration3(application)
+  import Vapor
+
+  /// A lifecycle handler for managing iteration-specific app logic.
+  class IterationLifecycleHandler: LifecycleHandler {
+      private let iteration: String
+
+      init(iteration: String) {
+          self.iteration = iteration
+      }
+
+      func didBoot(_ application: Application) throws {
+          print("Starting Iteration \(iteration) Lifecycle...")
+          
+          switch iteration {
+          case "1":
+              iteration_1(app: application)
+          case "2":
+              iteration_2(app: application)
+          default:
+              print("Unknown iteration: \(iteration)")
+              throw Abort(.badRequest, reason: "Unknown iteration.")
+          }
+      }
+  }
   ```
+
+### **2. Iteration-Specific Files**
+Each iteration is implemented in a separate file, encapsulating the logic for that iteration. These files define the routes, middleware, or other application-specific logic for the iteration.
+
+- **Location:**
+  ```
+  Sources/Iterations/iteration_1.swift
+  ```
+
+- **Example Implementation:**
+  ```swift
+  import Vapor
+
+  /// Logic for Iteration 1
+  func iteration_1(app: Application) {
+      app.get("health") { req -> String in
+          return "Server is healthy!"
+      }
+      print("Iteration 1: Health check route is active.")
+  }
+  ```
+
+### **3. Main Entry Point**
+The `main.swift` file initializes the application and registers the `IterationLifecycleHandler` to manage the iteration logic.
+
+- **Location:**
+  ```
+  Sources/main.swift
+  ```
+
+- **Implementation:**
+  ```swift
+  import Vapor
+
+  do {
+      // Parse command-line arguments
+      let iterationArgument = CommandLine.arguments.dropFirst().first ?? ""
+      
+      // Initialize Vapor application
+      let app = Application(.detect())
+      defer { app.shutdown() }
+
+      // Register the Iteration Lifecycle Handler
+      app.lifecycle.use(IterationLifecycleHandler(iteration: iterationArgument))
+
+      // Run the application
+      try app.run()
+  } catch {
+      print("Critical error in application lifecycle: \(error.localizedDescription)")
+      exit(1)
+  }
+  ```
+
+---
+
+## **Directory Structure**
+```
+Sources/
+├── IterationLifecycle/
+│   └── IterationLifecycleHandler.swift
+├── Iterations/
+│   └── iteration_1.swift
+└── main.swift
+```
+
+---
+
+## **Workflow**
+### **Step 1: Define Iterations**
+Each iteration is implemented in its respective file under the `Sources/Iterations/` directory. For example:
+- `iteration_1.swift` for Iteration 1.
+- `iteration_2.swift` for Iteration 2.
+
+### **Step 2: Register Lifecycle Handler**
+The `IterationLifecycleHandler` is registered in `main.swift` using `app.lifecycle.use`, ensuring it is invoked during the application lifecycle.
+
+### **Step 3: Execute Iterations**
+Run the application with the desired iteration as a command-line argument:
+```bash
+swift run CentralSequenceService 1
+```
+This executes the logic defined in `iteration_1.swift`.
 
 ---
 
 ## **Advantages**
-1. **Aligns with Vapor’s Lifecycle**:
-   - Hooks directly into Vapor’s lifecycle (`LifecycleHandler`).
-2. **Clear Iteration Structure**:
-   - Each iteration is isolated in its own file for modularity.
-3. **Scalable**:
-   - Adding or modifying iterations doesn’t affect the core logic.
-4. **No Command Conflicts**:
-   - Avoids overriding Vapor commands or CLI logic.
+1. **Separation of Concerns:**
+   - Iteration-specific logic is isolated in individual files.
+   - Lifecycle management is centralized in the `IterationLifecycleHandler`.
+
+2. **Extensibility:**
+   - New iterations can be added by creating new files and extending the `switch` statement in the handler.
+
+3. **Alignment with Vapor:**
+   - Uses Vapor’s `LifecycleHandler`, ensuring compatibility with its architecture.
 
 ---
 
 ## **Conclusion**
-This approach provides a robust and scalable way to execute iteration-based application logic in Vapor. By leveraging the `LifecycleHandler` protocol, the implementation ensures seamless integration with Vapor’s lifecycle, clear separation of iterations, and extensibility for future enhancements.
+This lifecycle-based approach simplifies the implementation of iteration-based application logic while adhering to Vapor’s design principles. By leveraging `LifecycleHandler`, it ensures a scalable, maintainable, and extensible solution for OpenAPI-driven development.
 
