@@ -1,6 +1,6 @@
-# Iteration 7 - A Hands-on Tutorial: Implementing SQLite Storage with Fluent in Vapor
+# Iteration 7 - Resolving Swift 6 Compatibility Warnings and SQLite Integration in Vapor
 
-This hands-on tutorial will guide you through integrating SQLite-backed persistence into a Vapor-based project using Fluent. We'll replace the in-memory storage for endpoints like `/sequence`, `/sequence/reorder`, and `/sequence/version`, and ensure the implementation aligns with the OpenAPI specification.
+This hands-on tutorial will guide you through integrating SQLite-backed persistence into a Vapor-based project using Fluent. Additionally, we'll address Swift 6 compatibility warnings regarding the `Sendable` protocol and improve the `configure.swift` file to register routes properly.
 
 By the end of this tutorial, you will:
 
@@ -8,13 +8,13 @@ By the end of this tutorial, you will:
 - Define database models for sequences and versions.
 - Create migrations to initialize the database schema.
 - Implement and test routes that interact with the database.
+- Resolve Swift 6 warnings related to `Sendable` compliance.
 
 Let's get started!
 
 ---
 
 ## **1. Project Structure**
-
 We will add new models, migrations, and an iteration script. Here is the project structure after completing this tutorial:
 
 ```
@@ -37,7 +37,6 @@ CentralSequenceService/
 ---
 
 ## **2. Package Dependencies**
-
 The `Package.swift` file already includes the required dependencies for Vapor, Fluent, and SQLite. No changes are needed:
 
 **`Package.swift`**:
@@ -78,8 +77,7 @@ swift package update
 ---
 
 ## **3. Define Database Models**
-
-We will define two models, `Sequence` and `Version`, to persist sequence and version data.
+We will define two models, `Sequence` and `Version`, to persist sequence and version data. Additionally, we will mark the classes as explicitly non-`Sendable` to resolve Swift 6 warnings.
 
 ### **`Models/Sequence.swift`**
 
@@ -87,6 +85,7 @@ We will define two models, `Sequence` and `Version`, to persist sequence and ver
 import Fluent
 import Vapor
 
+@unchecked Sendable
 final class Sequence: Model, Content {
     static let schema = "sequences"
 
@@ -119,6 +118,7 @@ final class Sequence: Model, Content {
 import Fluent
 import Vapor
 
+@unchecked Sendable
 final class Version: Model, Content {
     static let schema = "versions"
 
@@ -148,7 +148,6 @@ final class Version: Model, Content {
 ---
 
 ## **4. Create Migrations**
-
 Create two migration files to define the database schema.
 
 ### **`Migrations/CreateSequence.swift`**
@@ -195,9 +194,8 @@ struct CreateVersion: Migration {
 
 ---
 
-## **5. Configure Fluent**
-
-Update `configure.swift` to add Fluent and SQLite support:
+## **5. Configure Fluent and Register Routes**
+Update `configure.swift` to configure SQLite, register migrations, and define the missing `routes` method.
 
 **`configure.swift`**:
 
@@ -217,14 +215,19 @@ public func configure(_ app: Application) throws {
     try app.autoMigrate().wait()
 
     // Register routes
-    try routes(app)
+    routes(app)
+}
+
+func routes(_ app: Application) {
+    app.get("health") { req -> String in
+        return "Service is running"
+    }
 }
 ```
 
 ---
 
 ## **6. Implement the Routes**
-
 Create `iteration_7.swift` to implement the `/sequence` endpoint using the database.
 
 ### **`Iterations/iteration_7.swift`**
@@ -276,12 +279,12 @@ curl -X POST http://localhost:8080/sequence \
 ---
 
 ## **Conclusion**
-
 This tutorial demonstrates:
 
-- How to persist sequences and versions in a SQLite database using Fluent.
-- Compliance with the OpenAPI specification by including fields like `comment`.
-- A scalable and clean approach for managing data.
+- Integrating Fluent and SQLite for persistence.
+- Ensuring compliance with the OpenAPI specification by including fields like `comment`.
+- Resolving Swift 6 warnings related to `Sendable` classes.
+- Setting up routes and ensuring a functional service.
 
 Your application now supports robust, persistent storage with SQLite!
 
