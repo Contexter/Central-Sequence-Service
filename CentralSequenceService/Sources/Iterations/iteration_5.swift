@@ -27,7 +27,7 @@ public func iteration_5(app: Application) {
         var updatedElements: [String: Int] = [:]
 
         // Validate and update sequences
-        sequenceStoreQueue.sync {
+        try sequenceStoreQueue.sync {
             for (elementId, newSequence) in request.elements {
                 guard newSequence >= 0 else {
                     print("Validation failed: Invalid sequence number for elementId: \(elementId)")
