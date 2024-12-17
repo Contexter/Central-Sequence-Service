@@ -1,22 +1,9 @@
-# Iteration 7 - Resolving Swift 6 Compatibility Warnings and SQLite Integration in Vapor
+# Iteration 7 - Implementing SQLite Persistence and Route Management in Vapor
 
-This hands-on tutorial will guide you through integrating SQLite-backed persistence into a Vapor-based project using Fluent. Additionally, we'll address Swift 6 compatibility warnings regarding the `Sendable` protocol and improve the `configure.swift` file to register routes properly.
-
-By the end of this tutorial, you will:
-
-- Integrate Fluent and SQLite into the project.
-- Define database models for sequences and versions.
-- Create migrations to initialize the database schema.
-- Implement and test routes that interact with the database.
-- Resolve Swift 6 warnings related to `Sendable` compliance.
-- Ensure the server remains running for testing.
-
-Let's get started!
-
----
+In this tutorial, you will set up a SQLite-backed persistence layer in a Vapor-based Swift project using Fluent. You will also implement route management in a clean, modular way to keep the application organized. By the end of this guide, the server will remain running for continuous testing.
 
 ## **1. Project Structure**
-We will add new models, migrations, and an iteration script. Here is the project structure after completing this tutorial:
+We organize the project to maintain a clear separation of responsibilities for configuration, route registration, migrations, and models. Here's the resulting structure:
 
 ```
 CentralSequenceService/
@@ -24,6 +11,7 @@ CentralSequenceService/
 ├── Sources/
 │   ├── main.swift
 │   ├── configure.swift
+│   ├── routes.swift
 │   ├── Iterations/
 │   │   ├── iteration_7.swift
 │   ├── Migrations/
@@ -35,10 +23,17 @@ CentralSequenceService/
 └── Tests/
 ```
 
+This layout ensures:
+
+- **Models**: Define database entities.
+- **Migrations**: Create and manage database schema.
+- **Iterations**: Define specific iteration logic and routes.
+- **routes.swift**: Centralize route registration for better maintainability.
+
 ---
 
 ## **2. Package Dependencies**
-The `Package.swift` file already includes the required dependencies for Vapor, Fluent, and SQLite. No changes are needed:
+Your `Package.swift` already includes the required dependencies for Vapor, Fluent, and SQLite:
 
 **`Package.swift`**:
 
@@ -69,7 +64,7 @@ let package = Package(
 )
 ```
 
-Run the following command to fetch dependencies:
+To ensure dependencies are up to date, run:
 
 ```bash
 swift package update
@@ -77,8 +72,8 @@ swift package update
 
 ---
 
-## **3. Define Database Models**
-We will define two models, `Sequence` and `Version`, to persist sequence and version data. Additionally, we will mark the classes as explicitly non-`Sendable` to resolve Swift 6 warnings.
+## **3. Define the Models**
+We define two models, `Sequence` and `Version`, representing the database tables.
 
 ### **`Models/Sequence.swift`**
 
@@ -146,8 +141,8 @@ final class Version: Model, Content, @unchecked Sendable {
 
 ---
 
-## **4. Create Migrations**
-Create two migration files to define the database schema.
+## **4. Create Database Migrations**
+Define schema for `sequences` and `versions` tables using Fluent migrations.
 
 ### **`Migrations/CreateSequence.swift`**
 
@@ -193,41 +188,23 @@ struct CreateVersion: Migration {
 
 ---
 
-## **5. Configure Fluent and Register Routes**
-Update `configure.swift` to configure SQLite, register migrations, and define the missing `routes` method.
+## **5. Route Management**
+Organize routes into a dedicated `routes.swift` file to keep things modular.
 
-**`configure.swift`**:
+### **`routes.swift`**
 
 ```swift
-import Fluent
-import FluentSQLiteDriver
 import Vapor
-
-public func configure(_ app: Application) throws {
-    // Configure SQLite database
-    app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
-
-    // Register migrations
-    app.migrations.add(CreateSequence())
-    app.migrations.add(CreateVersion())
-
-    try app.autoMigrate().wait()
-
-    // Register routes
-    routes(app)
-}
 
 func routes(_ app: Application) {
     app.get("health") { req -> String in
         return "Service is running"
     }
+
+    // Register Iteration 7
+    iteration_7(app: app)
 }
 ```
-
----
-
-## **6. Implement the Routes**
-Create `iteration_7.swift` to implement the `/sequence` endpoint using the database.
 
 ### **`Iterations/iteration_7.swift`**
 
@@ -252,22 +229,39 @@ public func iteration_7(app: Application) {
                 }
             }
     }
-
     print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
+}
+```
+
+The server **does not shut down** after this iteration. The `main.swift` file remains untouched and continues to run iterations based on its predefined logic.
+
+---
+
+## **6. Application Configuration**
+Update `configure.swift` to initialize the database and routes:
+
+**`configure.swift`**:
+
+```swift
+import Fluent
+import FluentSQLiteDriver
+import Vapor
+
+public func configure(_ app: Application) throws {
+    app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
+
+    app.migrations.add(CreateSequence())
+    app.migrations.add(CreateVersion())
+    try app.autoMigrate().wait()
+
+    try routes(app)
 }
 ```
 
 ---
 
-## **7. Running and Testing**
-
-1. Start the application:
-
-```bash
-swift run CentralSequenceService
-```
-
-2. Use `curl` to test the endpoint:
+## **7. Testing the Application**
+Test the `/sequence` endpoint:
 
 ```bash
 curl -X POST http://localhost:8080/sequence \
@@ -275,17 +269,26 @@ curl -X POST http://localhost:8080/sequence \
 -d '{ "elementId": "item1", "comment": "First sequence" }'
 ```
 
-3. Verify that the server remains active for repeated testing.
+Expected response:
+
+```json
+{
+    "id": "<uuid>",
+    "elementId": "item1",
+    "sequenceNumber": 1,
+    "comment": "First sequence"
+}
+```
 
 ---
 
 ## **Conclusion**
-This tutorial demonstrates:
+In this tutorial, you:
 
-- Integrating Fluent and SQLite for persistence.
-- Ensuring compliance with the OpenAPI specification by including fields like `comment`.
-- Resolving Swift 6 warnings related to `Sendable` classes.
-- Setting up routes and ensuring a persistent, functional server for testing.
+- Set up SQLite persistence with Fluent.
+- Implemented database models and migrations.
+- Registered routes modularly for clean organization.
+- Ensured that the server remains active for testing.
 
-Your application now supports robust, persistent storage with SQLite!
+Your application is now ready for sequence management and continuous testing!
 
