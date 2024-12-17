@@ -16,7 +16,7 @@ public struct SequenceResponse: Codable, Content {
     let message: String
 }
 
-public func iteration_4(app: Application) {
+public func iteration_4(app: Application) throws {
     print("Iteration 4 logic executed. Setting up POST /sequence endpoint...")
 
     // POST /sequence endpoint
@@ -32,15 +32,15 @@ public func iteration_4(app: Application) {
             throw Abort(.badRequest, reason: "elementId cannot be empty or contain only whitespace.")
         }
 
-        var sequenceNumber: Int
-        sequenceStoreQueue.sync {
+        let sequenceNumber: Int = sequenceStoreQueue.sync {
             if sequenceStore[request.elementId] == nil {
                 print("Generating new sequence number for elementId: \(request.elementId)")
                 sequenceStore[request.elementId] = nextSequenceNumber.loadThenWrappingIncrement(ordering: .relaxed)
             }
-            sequenceNumber = sequenceStore[request.elementId]!
-            print("Retrieved sequence number: \(sequenceNumber) for elementId: \(request.elementId)")
+            return sequenceStore[request.elementId]!
         }
+        
+        print("Retrieved sequence number: \(sequenceNumber) for elementId: \(request.elementId)")
         
         print("Successfully generated response for elementId: \(request.elementId)")
         return SequenceResponse(
@@ -50,4 +50,5 @@ public func iteration_4(app: Application) {
     }
     
     print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
+    try app.run() // Keep the server running indefinitely
 }

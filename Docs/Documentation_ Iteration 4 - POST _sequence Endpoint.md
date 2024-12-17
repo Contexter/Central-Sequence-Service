@@ -29,7 +29,7 @@ public struct SequenceResponse: Codable, Content {
     let message: String
 }
 
-public func iteration_4(app: Application) {
+public func iteration_4(app: Application) throws {
     print("Iteration 4 logic executed. Setting up POST /sequence endpoint...")
 
     // POST /sequence endpoint
@@ -63,6 +63,7 @@ public func iteration_4(app: Application) {
     }
     
     print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
+    try app.run() // Keeps the server running
 }
 ```
 
@@ -98,6 +99,9 @@ This facilitates easier debugging and traceability during development.
 
 ### 5. **Response Encodable**
 - The `SequenceResponse` structure now conforms to `Content` to make it compatible with Vapor's response handling requirements.
+
+### 6. **Running the Server**
+- The function now calls `try app.run()` to ensure the Vapor application stays alive to handle incoming requests.
 
 ---
 
@@ -179,6 +183,7 @@ Iteration 4 introduces a robust and thread-safe endpoint for generating unique s
 - Thread safety using `DispatchQueue` and `ManagedAtomic`.
 - Debugging clarity through comprehensive logs.
 - Conformance to Vapor's `Content` protocol for response encoding.
+- Keeps the server running to accept multiple requests.
 
 This iteration provides a scalable foundation for sequence generation while adhering to clean and maintainable code practices.
 
