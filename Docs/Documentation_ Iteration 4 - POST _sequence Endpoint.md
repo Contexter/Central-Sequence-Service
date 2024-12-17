@@ -24,7 +24,7 @@ public struct SequenceRequest: Codable {
     let elementId: String
 }
 
-public struct SequenceResponse: Codable {
+public struct SequenceResponse: Codable, Content {
     let sequenceNumber: Int
     let message: String
 }
@@ -95,6 +95,9 @@ guard !request.elementId.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     - Final response preparation.
 
 This facilitates easier debugging and traceability during development.
+
+### 5. **Response Encodable**
+- The `SequenceResponse` structure now conforms to `Content` to make it compatible with Vapor's response handling requirements.
 
 ---
 
@@ -175,6 +178,7 @@ Iteration 4 introduces a robust and thread-safe endpoint for generating unique s
 - Proper input validation.
 - Thread safety using `DispatchQueue` and `ManagedAtomic`.
 - Debugging clarity through comprehensive logs.
+- Conformance to Vapor's `Content` protocol for response encoding.
 
 This iteration provides a scalable foundation for sequence generation while adhering to clean and maintainable code practices.
 
