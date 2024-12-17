@@ -18,4 +18,6 @@ public func iteration_7(app: Application) {
                 }
             }
     }
+
+    print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
 }

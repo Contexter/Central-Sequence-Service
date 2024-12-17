@@ -264,7 +264,7 @@ public func iteration_7(app: Application) {
 1. Start the application:
 
 ```bash
-swift run CentralSequenceService --env production
+swift run CentralSequenceService
 ```
 
 2. Use `curl` to test the endpoint:
@@ -275,7 +275,7 @@ curl -X POST http://localhost:8080/sequence \
 -d '{ "elementId": "item1", "comment": "First sequence" }'
 ```
 
-3. Verify that the server continues running for repeated requests.
+3. Verify that the server remains active for repeated testing.
 
 ---
 
