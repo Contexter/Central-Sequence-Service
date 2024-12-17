@@ -13,5 +13,11 @@ public func configure(_ app: Application) throws {
     try app.autoMigrate().wait()
 
     // Register routes
-    try routes(app)
+    routes(app)
+}
+
+func routes(_ app: Application) {
+    app.get("health") { req -> String in
+        return "Service is running"
+    }
 }

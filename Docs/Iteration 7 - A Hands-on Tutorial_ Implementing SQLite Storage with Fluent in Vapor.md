@@ -9,6 +9,7 @@ By the end of this tutorial, you will:
 - Create migrations to initialize the database schema.
 - Implement and test routes that interact with the database.
 - Resolve Swift 6 warnings related to `Sendable` compliance.
+- Ensure the server remains running for testing.
 
 Let's get started!
 
@@ -85,8 +86,7 @@ We will define two models, `Sequence` and `Version`, to persist sequence and ver
 import Fluent
 import Vapor
 
-@unchecked Sendable
-final class Sequence: Model, Content {
+final class Sequence: Model, Content, @unchecked Sendable {
     static let schema = "sequences"
 
     @ID(key: .id)
@@ -118,8 +118,7 @@ final class Sequence: Model, Content {
 import Fluent
 import Vapor
 
-@unchecked Sendable
-final class Version: Model, Content {
+final class Version: Model, Content, @unchecked Sendable {
     static let schema = "versions"
 
     @ID(key: .id)
@@ -253,6 +252,8 @@ public func iteration_7(app: Application) {
                 }
             }
     }
+
+    print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
 }
 ```
 
@@ -263,7 +264,7 @@ public func iteration_7(app: Application) {
 1. Start the application:
 
 ```bash
-swift run CentralSequenceService
+swift run CentralSequenceService --env production
 ```
 
 2. Use `curl` to test the endpoint:
@@ -274,7 +275,7 @@ curl -X POST http://localhost:8080/sequence \
 -d '{ "elementId": "item1", "comment": "First sequence" }'
 ```
 
-3. Verify that the sequence number increments correctly with repeated requests.
+3. Verify that the server continues running for repeated requests.
 
 ---
 
@@ -284,7 +285,7 @@ This tutorial demonstrates:
 - Integrating Fluent and SQLite for persistence.
 - Ensuring compliance with the OpenAPI specification by including fields like `comment`.
 - Resolving Swift 6 warnings related to `Sendable` classes.
-- Setting up routes and ensuring a functional service.
+- Setting up routes and ensuring a persistent, functional server for testing.
 
 Your application now supports robust, persistent storage with SQLite!
 

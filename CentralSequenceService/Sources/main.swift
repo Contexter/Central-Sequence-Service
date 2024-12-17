@@ -6,8 +6,8 @@ do {
     defer { app.shutdown() }
 
     // Select which iteration to run here
-    print("Starting Iteration 6...")
-    iteration_6(app: app)  // Corrected to include the `app:` label.
+    print("Starting Iteration 7...")
+    iteration_7(app: app)  // Corrected to include the `app:` label.
 
     print("Shutting down the application.")
 } catch {
