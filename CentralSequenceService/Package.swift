@@ -10,7 +10,7 @@ let package = Package(
         // OpenAPI Generator
         .package(url: "https://github.com/apple/swift-openapi-generator.git", from: "1.5.0"),
         .package(url: "https://github.com/apple/swift-openapi-runtime.git", from: "1.5.0"),
-        .package(url: "https://github.com/swift-server/swift-openapi-vapor.git", from: "1.0.1"), // Updated version
+        .package(url: "https://github.com/swift-server/swift-openapi-vapor.git", from: "1.0.1"),
 
         // Vapor
         .package(url: "https://github.com/vapor/vapor.git", from: "4.89.0"),
@@ -34,12 +34,8 @@ let package = Package(
                 .product(name: "Typesense", package: "typesense-swift"),
             ],
             path: "Sources",
-            exclude: [
-                "../.build/checkouts/swift-algorithms/Sources/Algorithms/Documentation.docc"
-            ],
-            resources: [
-                .process("openapi.yaml"),
-                .process("openapi-generator-config.yaml")
+            plugins: [
+                .plugin(name: "OpenAPIGenerator", package: "swift-openapi-generator")
             ]
         )
     ]
