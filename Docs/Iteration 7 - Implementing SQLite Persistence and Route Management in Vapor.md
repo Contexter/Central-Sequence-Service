@@ -230,6 +230,9 @@ public func iteration_7(app: Application) {
             }
     }
     print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
+
+    // Keep server running
+    app.logger.info("Iteration 7 server is running and ready for testing")
 }
 ```
 
@@ -254,7 +257,7 @@ public func configure(_ app: Application) throws {
     app.migrations.add(CreateVersion())
     try app.autoMigrate().wait()
 
-    try routes(app)
+    routes(app)
 }
 ```
 
