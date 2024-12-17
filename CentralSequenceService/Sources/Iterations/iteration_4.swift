@@ -11,7 +11,7 @@ public struct SequenceRequest: Codable {
     let elementId: String
 }
 
-public struct SequenceResponse: Codable {
+public struct SequenceResponse: Codable, Content {
     let sequenceNumber: Int
     let message: String
 }
