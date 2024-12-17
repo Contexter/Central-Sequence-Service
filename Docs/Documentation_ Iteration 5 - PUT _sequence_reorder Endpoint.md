@@ -40,7 +40,7 @@ public func iteration_5(app: Application) {
         var updatedElements: [String: Int] = [:]
 
         // Validate and update sequences
-        sequenceStoreQueue.sync {
+        try sequenceStoreQueue.sync {
             for (elementId, newSequence) in request.elements {
                 guard newSequence >= 0 else {
                     print("Validation failed: Invalid sequence number for elementId: \(elementId)")
@@ -101,7 +101,7 @@ public func iteration_5(app: Application) {
 - The dictionary `sequenceStore` is accessed and updated within a synchronous `DispatchQueue` block to ensure thread safety.
 - Sequences are updated atomically in the following loop:
     ```swift
-    sequenceStoreQueue.sync {
+    try sequenceStoreQueue.sync {
         for (elementId, newSequence) in request.elements {
             sequenceStore[elementId] = newSequence
         }
