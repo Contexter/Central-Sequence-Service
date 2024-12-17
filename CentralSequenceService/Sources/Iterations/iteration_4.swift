@@ -16,7 +16,7 @@ public struct SequenceResponse: Codable, Content {
     let message: String
 }
 
-public func iteration_4(app: Application) throws {
+public func iteration_4(app: Application) {
     print("Iteration 4 logic executed. Setting up POST /sequence endpoint...")
 
     // POST /sequence endpoint
@@ -50,5 +50,5 @@ public func iteration_4(app: Application) throws {
     }
     
     print("POST /sequence endpoint is ready at http://localhost:8080/sequence")
-    try app.run() // Keep the server running indefinitely
+    _ = try? app.run() // Handle the throw internally without propagating
 }
