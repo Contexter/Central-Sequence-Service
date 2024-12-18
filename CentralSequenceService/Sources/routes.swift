@@ -1,10 +1,9 @@
 import Vapor
+import OpenAPIVapor
 
-func routes(_ app: Application) {
-    app.get("health") { req -> String in
-        return "Service is running"
-    }
-
-    // Register Iteration 7
-    iteration_7(app: app)
+func registerRoutes(app: Application) throws {
+    let transport = VaporTransport(routesBuilder: app)
+    let api = CentralSequenceServiceAPI(app: app)
+    try api.registerHandlers(on: transport)
+    app.logger.info("All OpenAPI routes registered successfully.")
 }
