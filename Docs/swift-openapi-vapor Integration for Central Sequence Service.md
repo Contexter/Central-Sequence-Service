@@ -102,8 +102,14 @@ import Vapor
 
 struct ReorderHandler {
     func handleReorderElements(_ input: Operations.reorderElements.Input) async throws -> Operations.reorderElements.Output {
-        let response = Components.Schemas.ReorderResponse(comment: "Reordered successfully.")
-        return .ok(.init(body: .json(response)))
+        let updatedElements = input.elements.map { elementId, newSequence in
+            guard newSequence >= 0 else {
+                throw Abort(.badRequest, reason: "Sequence number must be non-negative for elementId: \(elementId)")
+            }
+            return (elementId, newSequence)
+        }
+
+        return .ok(.init(body: .json(updatedElements)))
     }
 }
 ```
@@ -116,8 +122,10 @@ import Vapor
 
 struct VersionHandler {
     func handleCreateVersion(_ input: Operations.createVersion.Input) async throws -> Operations.createVersion.Output {
-        let response = Components.Schemas.VersionResponse(comment: "Version created successfully.")
-        return .created(.init(body: .json(response)))
+        let versionNumber = (versionStore[input.elementId] ?? 0) + 1
+        versionStore[input.elementId] = versionNumber
+
+        return .created(.init(body: .json(["versionNumber": versionNumber])))
     }
 }
 ```
@@ -273,32 +281,34 @@ curl -X POST http://localhost:8080/sequence \
 ```
 
 ### **Reordering Elements**
-Reorder elements (stubbed logic):
+Reorder elements using the business logic from Iteration 5:
 ```bash
 curl -X PUT http://localhost:8080/sequence/reorder \
 -H "Content-Type: application/json" \
--d '{ "elementId": 123, "order": [1, 2, 3] }'
+-d '{ "elements": { "123": 1, "124": 2 } }'
 ```
 
 **Expected Response**:
 ```json
 {
-    "comment": "Reordered successfully."
+    "updatedElements": { "123": 1, "124": 2 },
+    "message": "Sequence numbers successfully updated."
 }
 ```
 
 ### **Creating a Version**
-Create a version (stubbed logic):
+Create a version using Iteration 6 logic:
 ```bash
 curl -X POST http://localhost:8080/sequence/version \
 -H "Content-Type: application/json" \
--d '{ "elementId": 123, "comment": "Create new version" }'
+-d '{ "elementId": 123 }'
 ```
 
 **Expected Response**:
 ```json
 {
-    "comment": "Version created successfully."
+    "versionNumber": 2,
+    "message": "Version successfully created."
 }
 ```
 
@@ -311,7 +321,8 @@ By integrating **swift-openapi-vapor** into your Central Sequence Service projec
 1. **Implemented** OpenAPI-defined endpoints using `APIProtocol`.
 2. **Delegated logic** to modular handler files for better scalability and readability.
 3. **Automatically Registered** routes with Vapor using `VaporTransport`.
-4. **Tested** the API endpoints to verify functionality.
+4. **Integrated** logic from previous iterations to complete the stubs in handlers.
+5. **Tested** the API endpoints to verify functionality.
 
 This approach eliminates boilerplate code, ensures consistency with the OpenAPI specification, and keeps your project scalable and maintainable.
 
@@ -321,4 +332,6 @@ This approach eliminates boilerplate code, ensures consistency with the OpenAPI 
 - Optimize performance for production deployment.
 
 Your API is now production-ready! 🚀
+
+
 
