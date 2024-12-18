@@ -1,4 +1,5 @@
 # Iteration 7 - Implementing SQLite Persistence and Route Management in Vapor
+> This is NOT reflecting the de facto commit code but a restrosectively generated documentation. It marks the switch off from the itrations_X series to an official roll out of OpenAPIVapor use
 
 In this tutorial, you will set up a SQLite-backed persistence layer in a Vapor-based Swift project using Fluent. You will also implement route management in a clean, modular way to keep the application organized. By the end of this guide, the server will remain running for continuous testing.
 
