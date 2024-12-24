@@ -2,25 +2,42 @@
 
 ---
 
-## **1. Overview of FountainAI**
+## Table of Contents
+1. [Overview of FountainAI](#1-overview-of-fountainai)
+2. [Central Sequence Service](#2-central-sequence-service)
+   - [2.1 Purpose](#21-purpose)
+   - [2.2 Predefined Components CSS Enforces](#22-predefined-components-css-enforces)
+   - [2.3 Components CSS Can Track](#23-components-css-can-track)
+3. [Key Functions](#3-key-functions)
+   - [3.1 Sequence Number Management](#31-sequence-number-management)
+   - [3.2 Typesense Integration](#32-typesense-integration)
+   - [3.3 Scalability and Synchronization](#33-scalability-and-synchronization)
+   - [3.4 Optimistic Concurrency Control (OCC)](#34-optimistic-concurrency-control-occ)
+   - [3.5 Error Handling and Recovery](#35-error-handling-and-recovery)
+4. [Practical Use Cases in FountainAI](#4-practical-use-cases-in-fountainai)
+5. [Conclusion](#5-conclusion)
+
+---
+
+## 1. Overview of FountainAI
 FountainAI is a modular and scalable framework designed to power **narrative-driven workflows**, **collaborative editing**, and **interactive storytelling systems**. It leverages modern technologies like **Swift Vapor** and **Typesense** to provide seamless integration between **API-driven microservices**.
 
 This documentation focuses on the **Central Sequence Service (CSS)**, a core component of FountainAI, responsible for **sequence management**, **versioning**, and **synchronization** across distributed systems.
 
 ---
 
-## **2. Central Sequence Service**
+## 2. Central Sequence Service
 
-### **Purpose**
+### 2.1 Purpose
 The **Central Sequence Service (CSS)** is designed to be **component-agnostic**. While it enforces strict **sequence ordering** and **versioning** for predefined components, it also supports **tracking any component** as long as it adheres to the required schema defined in the **OpenAPI contract**. This makes CSS **extensible** and capable of adapting to evolving requirements.
 
-### **Predefined Components CSS Enforces:**
+### 2.2 Predefined Components CSS Enforces:
 - **Scripts** - Represents overarching narrative structures.
 - **Sections** - Subdivisions within scripts, such as scenes or chapters.
 - **Actions** - Individual actions or events within sections.
 - **Versions** - Historical snapshots of scripts, sections, or actions, enabling rollback and auditing.
 
-### **Components CSS Can Track:**
+### 2.3 Components CSS Can Track:
 - **Contexts** - Metadata defining relationships between story elements, ensuring context-aware processing.
 - **Performers** - Entities responsible for enacting scripts or actions.
 - **Paraphrases** - Variations in text or dialogues that map to actions or scripts, providing narrative flexibility.
@@ -31,9 +48,9 @@ This flexibility ensures that CSS can evolve alongside FountainAI without requir
 
 ---
 
-## **3. Key Functions**
+## 3. Key Functions
 
-### **1. Sequence Number Management**
+### 3.1 Sequence Number Management
 **Purpose:**  
 - Ensures every element in the system (scripts, sections, actions) has a **unique and ordered sequence number**.
 
@@ -55,7 +72,7 @@ This flexibility ensures that CSS can evolve alongside FountainAI without requir
 
 ---
 
-### **2. Typesense Integration**
+### 3.2 Typesense Integration
 **Purpose:**  
 - Ensures **fast, typo-tolerant search capabilities** for sequence numbers and versions.  
 - Provides **instant synchronization** between database updates and the Typesense search index.  
@@ -67,88 +84,58 @@ This flexibility ensures that CSS can evolve alongside FountainAI without requir
 
 ---
 
-### **3. Scalability and Synchronization**
+### 3.3 Scalability and Synchronization
 **Purpose:**  
 - Supports **distributed systems** by maintaining **order consistency** across multiple services in FountainAI.  
 - Guarantees synchronization with the **Typesense index** even in cases of **failures or retries**.
 
 **Features:**
-- **Atomic Updates:** Prevents conflicts during simultaneous updates.  
-- **Retry Mechanism:** Ensures failed synchronization attempts with Typesense are retried automatically.  
-- **Error Handling:** Provides detailed error responses for failures (e.g., 502 for Typesense sync errors).  
+- **Atomic Updates:** Prevents conflicts during simultaneous updates by grouping multiple operations into a single **database transaction**.
+- **Sequence Locking:** Implements **optimistic concurrency control** to validate sequence numbers before applying updates.
+- **Validation Checks:** Ensures all inputs conform to **OpenAPI schemas** before execution.
 
 ---
 
-### **4. Version Control and Auditability**
-**Purpose:**  
-- Maintains **historical records** for tracking changes.  
-- Allows **rollback** to previous versions for audit purposes.  
+### 3.4 Optimistic Concurrency Control (OCC)
+**Purpose:**
+- Ensures **atomicity** by validating data consistency without using locks.
 
-**Scenarios:**
-- **Story Edits:** Track how scripts or sections evolve over time.  
-- **Collaboration Logs:** Record who made changes and why (via comments).  
-- **Recovery Options:** Roll back to previous states if errors occur.
+**Steps:**
+1. **Read Phase:** Retrieve the current state of data.
+2. **Validation Phase:** Check if data has changed since reading; reject updates if inconsistencies are detected.
+3. **Write Phase:** Commit updates only if validation passes.
 
----
-
-### **5. Error Handling and Recovery**
-**Purpose:**  
-- Handles synchronization failures with **Typesense** gracefully.  
-- Provides structured **error responses** for debugging (e.g., error codes, retry counts).  
-
-**Key Error Types:**
-- **400:** Invalid input validation errors.  
-- **502:** Failed Typesense synchronization.  
-- **500:** Internal server errors.  
-
-**Benefit:**  
-- Ensures robustness in **distributed and concurrent workflows**.
+**Benefits:**
+- Avoids locks, improving scalability.
+- Prevents race conditions through version checks.
+- Ensures consistency across distributed systems.
 
 ---
 
-## **4. Practical Use Cases in FountainAI**
+### 3.5 Error Handling and Recovery
+**Purpose:**
+- Handles errors gracefully to ensure data integrity and synchronization.
 
-1. **Story and Script Management:**  
-   - Maintain order of scripts, sections, and actions in multi-scene narratives.  
-   - Provide quick search access to elements via Typesense integration.  
+**Key Mechanisms:**
+- **Validation Errors (400):** Immediate feedback for invalid requests.
+- **Synchronization Errors (502):** Retries updates until consistency with Typesense is restored.
+- **Server Errors (500):** Logs and reports unexpected failures.
 
-2. **Live Collaboration and Editing:**  
-   - Support multiple users editing scripts simultaneously without conflicts.  
-   - Track changes and versions to avoid overwrites or data loss.  
-
-3. **Interactive Storytelling Systems:**  
-   - Dynamically reorder sequences based on audience interactions.  
-   - Roll back versions to experiment with narrative changes.  
-
-4. **Content Versioning for Media Production:**  
-   - Manage iterations of scripts or drafts during pre-production and filming.  
-   - Synchronize updates across teams working on different parts of a project.  
-
-5. **Search-Driven Applications:**  
-   - Provide fast lookups and autocomplete features using Typesense for large datasets.  
-   - Support **fuzzy matching** and **filtering** for metadata-driven searches.
+**Benefits:**
+- Ensures robustness even under failure scenarios.
+- Enables debugging through detailed error logs.
 
 ---
 
-## **5. Why is the Central Sequence Service Critical?**
-
-1. **Data Consistency and Order Enforcement:**  
-   - Guarantees sequence consistency, ensuring scripts and actions remain **in sync** across workflows.  
-
-2. **Scalable and Extensible:**  
-   - Modular design allows adding **new element types** or **sequence workflows** without disrupting existing features.  
-
-3. **Search-Optimized Architecture:**  
-   - Leveraging **Typesense** enables **near-instant lookups**, ideal for fast-paced production environments.  
-
-4. **Resilience and Fault Tolerance:**  
-   - Retry mechanisms and structured error handling provide stability during synchronization failures.  
-
-5. **Compliance with OpenAPI Standards:**  
-   - Ensures interoperability with external systems and microservices by adhering to the **OpenAPI contract**.
+## 4. Practical Use Cases in FountainAI
+- **Story and Script Management:** Maintain sequences for narrative structures and support API-driven workflows for consistency.
+- **Live Collaboration and Editing:** Enable multiple users to edit scripts concurrently while preserving ordering and consistency.
+- **Interactive Storytelling Systems:** Dynamically reorder sequences based on audience inputs and experimental changes.
+- **Content Versioning for Media Production:** Track and manage script iterations during development and production phases.
+- **Search-Driven Applications:** Provide instant, typo-tolerant lookups and metadata filtering using Typesense integration.
 
 ---
 
-## **6. Conclusion**
-The **Central Sequence Service** serves as the **ordering and synchronization backbone** for FountainAI. Its integration with Typesense, support for versioning, and ability to maintain order consistency make it indispensable for **narrative-driven workflows**, **collaborative editing**, and **interactive storytelling**.
+## 5. Conclusion
+The **Central Sequence Service (CSS)** forms the backbone of FountainAI's **scalable and modular architecture**. By enforcing **sequence consistency**, supporting **atomic updates**, and leveraging **Typesense integration**, it ensures robust **synchronization** and **version control** for distributed systems.
 
