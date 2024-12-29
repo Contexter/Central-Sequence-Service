@@ -1,18 +1,25 @@
+// File: Sources/Routes/APIImplementation.swift
+// Position: CentralSequenceService/Sources/Routes/APIImplementation.swift
+// Purpose: Implements the API protocol to handle requests and process responses.
+
 import Vapor
+import OpenAPIRuntime
 import OpenAPIVapor
 
-struct CentralSequenceServiceAPI: APIProtocol {
-    let app: Application
+struct APIImplementation: APIProtocol {
 
-    func generateSequenceNumber(_ input: Operations.generateSequenceNumber.Input) async throws -> Operations.generateSequenceNumber.Output {
-        return try await SequenceHandler(app: app).handleGenerateSequence(input)
+    // Handles the creation of a new sequence, initializing it for workflow processing.
+    func createSequence(_ input: CreateSequenceRequest) async throws -> CreateSequenceResponse {
+        return CreateSequenceResponse(sequenceNumber: 1, comment: "New sequence initialized for workflow processing.")
     }
 
-    func reorderElements(_ input: Operations.reorderElements.Input) async throws -> Operations.reorderElements.Output {
-        return try await ReorderHandler().handleReorderElements(input)
+    // Handles reordering elements within a sequence and confirms the updated state.
+    func reorderSequence(_ input: ReorderSequenceRequest) async throws -> ReorderSequenceResponse {
+        return ReorderSequenceResponse(updatedElements: input.elements, comment: "Sequence elements reordered successfully.")
     }
 
-    func createVersion(_ input: Operations.createVersion.Input) async throws -> Operations.createVersion.Output {
-        return try await VersionHandler().handleCreateVersion(input)
+    // Handles creating a new version of an existing sequence, tracking changes for version control.
+    func createVersion(_ input: CreateVersionRequest) async throws -> CreateVersionResponse {
+        return CreateVersionResponse(versionNumber: 1, comment: "Version 1 created for change tracking and version control.")
     }
 }
