@@ -1,16 +1,17 @@
-import Fluent
-import FluentSQLiteDriver
+// File: Sources/configure.swift
+// Position: CentralSequenceService/Sources/configure.swift
+// Purpose: Configures the Vapor application, registers middleware, and sets up API routes.
+
 import Vapor
+import OpenAPIVapor
 
-public func configure(_ app: Application) throws {
-    // Configure SQLite database
-    app.databases.use(.sqlite(.file("db.sqlite")), as: .sqlite)
+func configure(_ app: Application) throws {
+    // Adds default error middleware for handling uncaught errors and returning standard responses.
+    app.middleware.use(ErrorMiddleware.default(environment: app.environment))
 
-    // Add migrations
-    app.migrations.add(CreateSequence())
-    app.migrations.add(CreateVersion())
-    try app.autoMigrate().wait()
+    // Registers the API handler which automatically maps routes to OpenAPI protocol methods.
+    try app.register(collection: APIHandler())
 
-    // Register OpenAPI routes
-    try registerRoutes(app: app)
+    // Adds middleware for API key validation.
+    app.middleware.use(APIKeyMiddleware())
 }
