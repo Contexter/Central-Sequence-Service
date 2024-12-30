@@ -1,25 +1,59 @@
-// File: Sources/Routes/APIImplementation.swift
-// Position: CentralSequenceService/Sources/Routes/APIImplementation.swift
-// Purpose: Implements the API protocol to handle requests and process responses.
-
 import Vapor
-import OpenAPIRuntime
-import OpenAPIVapor
 
 struct APIImplementation: APIProtocol {
 
-    // Handles the creation of a new sequence, initializing it for workflow processing.
-    func createSequence(_ input: CreateSequenceRequest) async throws -> CreateSequenceResponse {
-        return CreateSequenceResponse(sequenceNumber: 1, comment: "New sequence initialized for workflow processing.")
+    // MARK: - Generate Sequence Number
+    func generateSequenceNumber(
+        _ input: Operations.generateSequenceNumber.Input
+    ) async throws -> Operations.generateSequenceNumber.Output {
+
+        // Construct the response based on the defined schema
+        let response = Components.Schemas.SequenceResponse(
+            sequenceNumber: 1,
+            comment: "New sequence initialized."
+        )
+
+        return .created(.init(body: .json(response)))
     }
 
-    // Handles reordering elements within a sequence and confirms the updated state.
-    func reorderSequence(_ input: ReorderSequenceRequest) async throws -> ReorderSequenceResponse {
-        return ReorderSequenceResponse(updatedElements: input.elements, comment: "Sequence elements reordered successfully.")
+    // MARK: - Reorder Elements
+    func reorderElements(
+        _ input: Operations.reorderElements.Input
+    ) async throws -> Operations.reorderElements.Output {
+
+        // Extract elements from the request body
+        guard case let .json(body) = input.body else {
+            throw Abort(.badRequest, reason: "Invalid body format")
+        }
+
+        // Map elements to updated elements payload
+        let updatedElements = body.elements.map {
+            Components.Schemas.ReorderResponse.updatedElementsPayloadPayload(
+                elementId: $0.elementId,
+                newSequence: $0.newSequence
+            )
+        }
+
+        // Construct the response
+        let response = Components.Schemas.ReorderResponse(
+            updatedElements: updatedElements,
+            comment: "Elements reordered successfully."
+        )
+
+        return .ok(.init(body: .json(response)))
     }
 
-    // Handles creating a new version of an existing sequence, tracking changes for version control.
-    func createVersion(_ input: CreateVersionRequest) async throws -> CreateVersionResponse {
-        return CreateVersionResponse(versionNumber: 1, comment: "Version 1 created for change tracking and version control.")
+    // MARK: - Create Version
+    func createVersion(
+        _ input: Operations.createVersion.Input
+    ) async throws -> Operations.createVersion.Output {
+
+        // Construct the response based on the defined schema
+        let response = Components.Schemas.VersionResponse(
+            versionNumber: 1,
+            comment: "Version 1 created."
+        )
+
+        return .created(.init(body: .json(response)))
     }
 }

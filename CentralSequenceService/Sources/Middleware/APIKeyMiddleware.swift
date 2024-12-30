@@ -1,14 +1,17 @@
-// File: Sources/Middleware/APIKeyMiddleware.swift
-// Position: CentralSequenceService/Sources/Middleware/APIKeyMiddleware.swift
-// Purpose: Validates API key headers to restrict access to authorized clients only.
+//
+// File: Middleware/APIKeyMiddleware.swift
+// Path: Sources/Middleware/APIKeyMiddleware.swift
+//
 
 import Vapor
 
 struct APIKeyMiddleware: Middleware {
-    func respond(to request: Request, chainingTo next: Responder) async throws -> Response {
+    func respond(to request: Request, chainingTo next: Responder) -> EventLoopFuture<Response> {
+        // Validate API Key
         guard request.headers["X-API-KEY"].first == "valid-api-key" else {
-            throw Abort(.unauthorized) // Rejects requests with invalid or missing keys.
+            return request.eventLoop.makeFailedFuture(Abort(.unauthorized))
         }
-        return try await next.respond(to: request)
+        // Forward request to the next middleware or route handler
+        return next.respond(to: request)
     }
 }
