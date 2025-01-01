@@ -2,7 +2,7 @@
 
 ## Purpose
 
-This guide provides a structured approach for managing **issue tracking** and **updates** during the development process, ensuring clear documentation of progress, task completion, and traceability.
+This guide provides a structured approach for managing issue tracking and updates during the development process, ensuring clear documentation of progress, task completion, and traceability.
 
 ---
 
@@ -68,7 +68,58 @@ Updated related tests for validation.
 
 ---
 
-### **5. Close Issue Only When Fully Completed**
+### **5. Subtasks as Issues**
+
+#### **Why Use Subtasks as Separate Issues?**
+
+- **Granularity and Focus**: Tasks are easier to track when each issue addresses **one clear objective**.
+- **Traceability**: Commits and pull requests can be linked directly to smaller issues.
+- **Parallel Workflows**: Teams can work on multiple issues in parallel without bottlenecks.
+- **Clear Reporting**: Each issue has its own status updates, reducing clutter in the parent milestone.
+- **Flexibility**: Tasks requiring extra effort can evolve without disrupting the milestone.
+
+#### **Best Practices for Subtasks:**
+
+1. **Link Subtasks to Parent Issue**
+   - Reference the parent milestone or issue in the subtask description.
+   - Example:
+     ```
+     This issue is part of Milestone 1 (#23).
+     ```
+
+2. **Update Parent Issue Checklist**
+   - Mark subtasks as complete in the parent issue once closed.
+
+3. **Keep Parent Issue Open Until All Tasks Are Done**
+   - Only close the milestone when all subtasks are resolved.
+
+---
+
+### **6. Converting Tasks into Issues (Recommended Practice)**
+
+#### **Why Convert Tasks into Issues?**
+
+- GitHub offers a **built-in feature** to convert tasks into issues, which simplifies tracking.
+- Provides **dedicated space for discussions**, status updates, and commit references.
+- Allows **parallel progress** without losing focus on the parent issue.
+
+#### **Steps to Convert Tasks into Issues:**
+
+1. Go to the **parent issue's checklist**.
+2. Click the **task you want to convert**.
+3. Select **"Convert to Issue"** from the options.
+4. Add the necessary description and link it back to the **parent issue**.
+5. Update the parent issue's checklist to reflect the new issue link.
+
+**Example Checklist Update:**
+```
+- [x] Refactor API key middleware to align with Vapor's middleware protocols. (#28)
+- [ ] Test and verify endpoint behaviors against OpenAPI contract
+```
+
+---
+
+### **7. Close Issue Only When Fully Completed**
 
 - Leave the issue open until all tasks in the checklist are complete.
 - Add a **final comment summarizing completion** before closing.
@@ -109,7 +160,7 @@ Issue closed.
 
 ```
 - [x] Define and implement route definitions
-- [x] Create API key middleware for authentication
+- [x] Create API key middleware for authentication (#28)
 - [ ] Test and verify endpoint behaviors against OpenAPI contract
 - [ ] Implement error handling for invalid API keys and request formats
 ```
@@ -131,6 +182,7 @@ Following these structured practices for issue tracking ensures:
 - Clear communication of progress.
 - Traceability through commit references.
 - Organized milestone management with updated checklists.
+- Effective handling of subtasks via dedicated issues.
 
 Keep iterating based on this approach to efficiently manage development milestones.
 
